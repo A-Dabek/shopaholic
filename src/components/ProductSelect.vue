@@ -7,7 +7,13 @@
         :key="product.id"
       >{{ product.id }}</option>
     </select>
-    <input type="text" placeholder="Produkt" v-model="productName" @keydown.enter="onProductSubmit" />
+    <input
+      type="text"
+      class="product-input"
+      placeholder="Nowy produkt"
+      v-model="productName"
+      @keydown.enter="onProductSubmit"
+    />
   </div>
 </template>
 
@@ -33,7 +39,23 @@ export default defineComponent({
   width: 100%;
   justify-content: space-between;
 }
-.product-select, .product-input {
+.product-select,
+.product-input {
   width: 45%;
+  color: white;
+  padding: 2px 4px;
+  border: 3px solid white;
+  outline: none;
+  background-color: var(--var-color);
+}
+.product-input::placeholder {
+  color: white;
+  font-style: italic;
+}
+option:checked {
+  text-decoration: underline;
+  font-weight: bold;
+  color: white;
+  background: var(--var-color);
 }
 </style>

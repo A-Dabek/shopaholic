@@ -36,8 +36,35 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.wrapper .list {
+  color: white;
+  margin-bottom: 10px;
+}
 .wrapper input {
-  margin-top: 20px;
   width: 100%;
+  padding: 2px 4px;
+}
+input::placeholder {
+  font-style: italic;
+}
+.wrapper .list:nth-child(5n + 1) {
+  background: #dce775;
+  --var-color: #dce775;
+}
+.wrapper .list:nth-child(5n + 2) {
+  background: #4db6ac;
+  --var-color: #4db6ac;
+}
+.wrapper .list:nth-child(5n + 3) {
+  background: #a1887f;
+  --var-color: #a1887f;
+}
+.wrapper .list:nth-child(5n + 4) {
+  background: #f3cc74;
+  --var-color: #f3cc74;
+}
+.wrapper .list:nth-child(5n) {
+  background: #e08a8a;
+  --var-color: #e08a8a;
 }
 </style>

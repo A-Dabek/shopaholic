@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3>
+  <div class="wrapper">
+    <h3 class="header">
       <span>{{ data.title }}</span>
       <fa-i class="remove-list" icon="times" @click="removeList"></fa-i>
     </h3>
@@ -45,5 +45,11 @@ export default defineComponent({
 <style scoped>
 .remove-list {
   float: right;
+}
+.wrapper {
+  padding: 5px 10px;
+}
+.header {
+  margin-top: 0
 }
 </style>

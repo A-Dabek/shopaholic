@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Planner/>
+    <Planner />
   </div>
 </template>
 
@@ -19,5 +19,8 @@ export default Vue.extend({
 <style>
 #app {
   padding: 20px;
+}
+:root {
+  --var-color: white;
 }
 </style>
