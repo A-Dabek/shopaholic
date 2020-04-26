@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <List/>
+    <Planner/>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import List from "./components/List.vue";
+import Planner from "./components/Planner.vue";
 
 export default Vue.extend({
   name: "App",
   components: {
-    List
+    Planner
   }
 });
 </script>

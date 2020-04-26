@@ -1,9 +1,10 @@
 <template>
   <div>
+    <label>{{ title }}</label>
     <ul>
       <ListItem v-for="item of items" :key="item" :item="item" />
     </ul>
-    <ProductSelect @select="addToItems"/>
+    <ProductSelect @select="addToItems" />
   </div>
 </template>
 
@@ -18,10 +19,13 @@ export default defineComponent({
     ListItem,
     ProductSelect
   },
+  props: {
+    title: String
+  },
   setup() {
     const items = reactive(["a", "b", "c"]);
     function addToItems(item: string) {
-        items.push(item);
+      items.push(item);
     }
     return {
       items,
