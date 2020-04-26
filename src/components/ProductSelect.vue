@@ -1,44 +1,28 @@
 <template>
   <div>
     <select @change="onChange">
-      <option v-for="product of products" :value="product.id" :key="product.id">{{ product.id }}</option>
+      <option
+        v-for="product of productOptions"
+        :value="product.id"
+        :key="product.id"
+      >{{ product.id }}</option>
     </select>
     <input placeholder="Produkt" v-model="productName" @keydown.enter="onProductSubmit" />
   </div>
 </template>
 
 <script lang="ts">
+import { db } from "../firestore";
 import { defineComponent, reactive, ref } from "@vue/composition-api";
 import ListItem from "./ListItem.vue";
-import { db } from "../firestore";
+import { useProductSelectLogic } from "./useProductSelectLogic";
 export default defineComponent({
   name: "ProductSelect",
   firestore: {
-    products: db.collection("products")
+    productOptions: db.collection("products")
   },
   setup(props, { emit }) {
-    const products = reactive([]);
-    function onChange(event: Event) {
-      emit("select", (event.target as HTMLSelectElement).value);
-    }
-
-    const productName = ref("");
-    function onProductSubmit() {
-      db.collection("products")
-        .doc(productName.value)
-        .set({})
-        .then(() => {
-          emit("select", productName.value);
-          productName.value = "";
-        });
-    }
-
-    return {
-      products,
-      onChange,
-      productName,
-      onProductSubmit
-    };
+    return useProductSelectLogic(emit);
   }
 });
 </script>
