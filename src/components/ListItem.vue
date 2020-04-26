@@ -4,10 +4,11 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
+import { db } from "../firestore";
 export default defineComponent({
   name: "ListItem",
   props: {
-    item: String
+    item: String,
   },
   setup() {
     return {};
