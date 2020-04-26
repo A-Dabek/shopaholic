@@ -18,5 +18,6 @@ export default Vue.extend({
 
 <style>
 #app {
+  padding: 20px;
 }
 </style>

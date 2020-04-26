@@ -1,6 +1,6 @@
 <template>
   <li>
-    <span class="name">{{ item }}</span>
+    <label class="name">{{ item }}</label>
     <span class="count">
       <fa-i icon="minus" @click=decrement></fa-i>
       {{ count }}

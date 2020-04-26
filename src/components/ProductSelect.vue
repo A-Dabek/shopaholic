@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <select @change="onChange">
+  <div class="wrapper">
+    <select @change="onChange" class="product-select">
       <option
         v-for="product of productOptions"
         :value="product.id"
         :key="product.id"
       >{{ product.id }}</option>
     </select>
-    <input placeholder="Produkt" v-model="productName" @keydown.enter="onProductSubmit" />
+    <input type="text" placeholder="Produkt" v-model="productName" @keydown.enter="onProductSubmit" />
   </div>
 </template>
 
@@ -28,4 +28,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.product-select, .product-input {
+  width: 45%;
+}
 </style>

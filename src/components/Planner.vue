@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <List v-for="list of lists" :key="list.id" :data="list" />
+  <div class="wrapper">
+    <List class="list" v-for="list of lists" :key="list.id" :data="list" />
     <input placeholder="Nowa lista" v-model="newListTitle" @keydown.enter="newList" />
   </div>
 </template>
@@ -36,4 +36,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.wrapper input {
+  margin-top: 20px;
+  width: 100%;
+}
 </style>

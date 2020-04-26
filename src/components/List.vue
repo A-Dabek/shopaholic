@@ -1,9 +1,9 @@
 <template>
   <div>
-    <label>
+    <h3>
       <span>{{ data.title }}</span>
       <fa-i class="remove-list" icon="times" @click="removeList"></fa-i>
-    </label>
+    </h3>
     <ul>
       <ListItem
         v-for="item of distinctItems"
