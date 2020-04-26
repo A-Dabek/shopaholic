@@ -1,6 +1,6 @@
 <template>
   <div>
-    <List v-for="list of lists" :key="list" :title="list" />
+    <List v-for="list of lists" :key="list.id" :data="list" />
     <input placeholder="Nowa lista" v-model="newListTitle" @keydown.enter="newList" />
   </div>
 </template>
@@ -9,16 +9,21 @@
 import { defineComponent, reactive, ref } from "@vue/composition-api";
 import List from "./List.vue";
 import ProductSelect from "./ProductSelect.vue";
+import { db } from "../firestore";
+
 export default defineComponent({
   name: "Planner",
   components: {
     List
   },
+  firestore: {
+    lists: db.collection("planner")
+  },
   setup() {
     const newListTitle = ref("");
-    const lists = ref(["Default list"]);
+    const lists = ref([]);
     function newList() {
-      lists.value = [...lists.value, newListTitle.value];
+      db.collection("planner").add({ title: newListTitle.value, items: [] });
       newListTitle.value = "";
     }
     return {

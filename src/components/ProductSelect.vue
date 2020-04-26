@@ -1,7 +1,10 @@
 <template>
-  <select @change="onChange">
-    <option v-for="product of products" :value="product.id" :key="product.id">{{ product.id }}</option>
-  </select>
+  <div>
+    <select @change="onChange">
+      <option v-for="product of products" :value="product.id" :key="product.id">{{ product.id }}</option>
+    </select>
+    <input placeholder="Produkt" v-model="productName" @keydown.enter="onProductSubmit" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,9 +21,23 @@ export default defineComponent({
     function onChange(event: Event) {
       emit("select", (event.target as HTMLSelectElement).value);
     }
+
+    const productName = ref("");
+    function onProductSubmit() {
+      db.collection("products")
+        .doc(productName.value)
+        .set({})
+        .then(() => {
+          emit("select", productName.value);
+          productName.value = "";
+        });
+    }
+
     return {
       products,
-      onChange
+      onChange,
+      productName,
+      onProductSubmit
     };
   }
 });

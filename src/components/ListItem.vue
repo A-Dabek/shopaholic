@@ -15,17 +15,16 @@ import { db } from "../firestore";
 export default defineComponent({
   name: "ListItem",
   props: {
-    item: String
+    item: String,
+    count: Number
   },
-  setup() {
-    const count = ref(1);
+  setup(props, {emit}) {
     return {
-      count,
       increment() {
-        count.value += 1;
+        emit('increment');
       },
       decrement() {
-        count.value -= 1;
+        emit('decrement');
       }
     };
   }
