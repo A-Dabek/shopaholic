@@ -44,7 +44,7 @@ export default defineComponent({
   width: 45%;
   color: white;
   padding: 2px 4px;
-  border: 3px solid white;
+  border: 2px solid white;
   outline: none;
   background-color: var(--var-color);
 }

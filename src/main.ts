@@ -4,10 +4,10 @@ import VueCompositionApi from '@vue/composition-api';
 import "./registerServiceWorker";
 import { firestorePlugin } from 'vuefire';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faMinus, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faChevronDown, faChevronUp, faTimes, faQuestion } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faPlus, faMinus, faChevronDown, faChevronUp, faTimes);
+library.add(faPlus, faMinus, faChevronDown, faChevronUp, faTimes, faQuestion);
 
 Vue.use(VueCompositionApi);
 Vue.use(firestorePlugin);
