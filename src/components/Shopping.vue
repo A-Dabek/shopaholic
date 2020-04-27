@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <draggable :value="distinctItems" tag="ol" @change="onReorder">
+    <draggable :value="distinctItems" tag="ol" @change="onReorder" fallbackTolerance="5">
       <li
         v-for="(item, index) of distinctItems"
         :key="item"
@@ -29,6 +29,8 @@ import {
 import { db } from "../firestore";
 import { countBy, flatten, orderBy } from "lodash-es";
 import draggable from "vuedraggable";
+import { useShoppingLogic } from "./useShoppingLogic";
+import { useBoughtLogic } from "./useBoughtLogic";
 
 export default defineComponent({
   name: "Shopping",
@@ -42,8 +44,7 @@ export default defineComponent({
   },
   setup() {
     const shop = ref<{ [k: string]: number }>({});
-
-    const planned = ref([]);
+    const planned = ref<string[]>([]);
     const itemCount = computed(() => countBy(planned.value));
     const distinctItems = computed(() =>
       orderBy(Object.keys(itemCount.value), x => shop.value[x])
@@ -55,49 +56,7 @@ export default defineComponent({
         .map(data => data.id)
         .reduce((prev, curr) => ({ ...prev, [curr]: true }), {})
     );
-    function onItemClick(item: string) {
-      if (boughtDict.value[item]) {
-        db.collection("bought")
-          .doc(item)
-          .delete();
-      } else {
-        db.collection("bought")
-          .doc(item)
-          .set({});
-      }
-    }
 
-    function onReorder(event: {
-      moved: { element: string; oldIndex: number; newIndex: number };
-    }) {
-      const orderedEntries = orderBy(Object.entries(shop.value), x => x[1]);
-      const pushToLast = event.moved.newIndex >= orderedEntries.length;
-      const movingForwards = event.moved.newIndex > event.moved.oldIndex;
-      const newItemTuple: [string, number] = [
-        event.moved.element,
-        pushToLast ? orderedEntries.length : event.moved.newIndex
-      ];
-      const newOrderedEntries = orderedEntries
-        .filter(([key]) => key !== event.moved.element)
-        .flatMap((item, index) =>
-          item[1] === event.moved.newIndex ? (movingForwards ? [item, newItemTuple] : [newItemTuple, item]) : [item]
-        )
-        .map(([key], index) => [key, index]);
-      const newShopOrder = Object.fromEntries(pushToLast ? [...newOrderedEntries, newItemTuple] : newOrderedEntries);
-      db.collection("shops")
-        .doc("first shop")
-        .set(newShopOrder);
-    }
-
-    onMounted(() => {
-      db.collection("planner")
-        .get()
-        .then(snapshot => {
-          planned.value = flatten(
-            snapshot.docs.map(doc => doc.data().items)
-          ) as any;
-        });
-    });
     return {
       bought,
       planned,
@@ -105,8 +64,8 @@ export default defineComponent({
       itemCount,
       distinctItems,
       boughtDict,
-      onItemClick,
-      onReorder
+      ...useShoppingLogic(planned, shop),
+      ...useBoughtLogic(boughtDict)
     };
   }
 });
