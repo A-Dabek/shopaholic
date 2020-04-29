@@ -3,12 +3,13 @@ import {
   Ref, onMounted
 } from "@vue/composition-api";
 import { db } from "../firestore";
-import { countBy, flatten, orderBy } from "lodash-es";
+import { flatten, orderBy } from "lodash-es";
 
 
 export function useShoppingLogic(
   planned: Ref<string[]>,
-  shop: Ref<{ [k: string]: number }>
+  shop: Ref<{ [k: string]: number }>,
+  distinctItems: Ref<string[]>
 ) {
   onMounted(() => {
     db.collection("planner")
@@ -22,19 +23,16 @@ export function useShoppingLogic(
     moved: { element: string; oldIndex: number; newIndex: number };
   }) {
     const orderedEntries = orderBy(Object.entries(shop.value), x => x[1]);
-    const pushToLast = event.moved.newIndex >= orderedEntries.length;
-    const movingForwards = event.moved.newIndex > event.moved.oldIndex;
+    const pushToLast = event.moved.newIndex >= distinctItems.value.length;
     const newItemTuple: [string, number] = [
       event.moved.element,
-      pushToLast ? orderedEntries.length : event.moved.newIndex
+      pushToLast ? distinctItems.value.length : event.moved.newIndex
     ];
     const newOrderedEntries = orderedEntries
       .filter(([key]) => key !== event.moved.element)
-      .flatMap((item, index) =>
-        item[1] === event.moved.newIndex
-          ? movingForwards
-            ? [item, newItemTuple]
-            : [newItemTuple, item]
+      .flatMap(item =>
+        item[0] === distinctItems.value[event.moved.newIndex]
+          ? [newItemTuple, item]
           : [item]
       )
       .map(([key], index) => [key, index]);

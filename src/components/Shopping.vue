@@ -64,7 +64,7 @@ export default defineComponent({
       itemCount,
       distinctItems,
       boughtDict,
-      ...useShoppingLogic(planned, shop),
+      ...useShoppingLogic(planned, shop, distinctItems),
       ...useBoughtLogic(boughtDict)
     };
   }
