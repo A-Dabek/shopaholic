@@ -9,7 +9,7 @@ import { flatten, orderBy } from "lodash-es";
 export function useShoppingLogic(
   planned: Ref<string[]>,
   shop: Ref<{ [k: string]: number }>,
-  distinctItems: Ref<string[]>
+  distinctItems: Ref<readonly string[]>
 ) {
   onMounted(() => {
     db.collection("planner")
