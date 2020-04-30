@@ -22,17 +22,18 @@ export function useShoppingLogic(
   function onReorder(event: {
     moved: { element: string; oldIndex: number; newIndex: number };
   }) {
+    const distinctOrderedItems = distinctItems.value.filter(x => shop.value[x])
     const orderedEntries = orderBy(Object.entries(shop.value), x => x[1]);
-    const pushToLast = event.moved.newIndex >= distinctItems.value.length;
+    const pushToLast = event.moved.newIndex >= distinctOrderedItems.length;
     const newItemTuple: [string, number] = [
       event.moved.element,
-      pushToLast ? distinctItems.value.length : event.moved.newIndex
+      pushToLast ? distinctOrderedItems.length : event.moved.newIndex
     ];
     const newOrderedEntries = orderedEntries
       .filter(([key]) => key !== event.moved.element)
       .flatMap(item =>
-        item[0] === distinctItems.value[event.moved.newIndex]
-          ? [newItemTuple, item]
+        item[0] === distinctOrderedItems[event.moved.newIndex]
+          ? event.moved.newIndex === 0 ? [newItemTuple, item] : [item, newItemTuple]
           : [item]
       )
       .map(([key], index) => [key, index]);

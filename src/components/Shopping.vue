@@ -72,8 +72,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.wrapper {
+  padding: 2px 4px;
+}
+ol {
+  padding: 0
+}
 li {
   list-style: none;
+  font-size: 1.25rem;
 }
 li.bought {
   text-decoration: line-through;
