@@ -7,6 +7,7 @@ import { flatten, orderBy } from "lodash-es";
 
 
 export function useShoppingLogic(
+  shopName: string,
   planned: Ref<string[]>,
   shop: Ref<{ [k: string]: number }>,
   distinctItems: Ref<readonly string[]>
@@ -41,7 +42,7 @@ export function useShoppingLogic(
       pushToLast ? [...newOrderedEntries, newItemTuple] : newOrderedEntries
     );
     db.collection("shops")
-      .doc("first shop")
+      .doc(shopName)
       .set(newShopOrder);
   }
 

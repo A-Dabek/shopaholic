@@ -2,21 +2,21 @@
   <div id="app">
     <Heading class="header" @planning="planning=true" @shopping="planning=false" />
     <Planner v-if="planning" />
-    <shopping v-else />
+    <ShopList v-else />
   </div>
 </template>
 
 <script lang="ts">
+import ShopList from "./components/ShopList.vue";
 import Planner from "./components/Planner.vue";
-import Shopping from "./components/Shopping.vue";
 import Heading from "./components/Heading.vue";
 import { defineComponent, ref } from "@vue/composition-api";
 
 export default defineComponent({
   name: "App",
   components: {
+    ShopList,
     Planner,
-    Shopping,
     Heading
   },
   setup() {

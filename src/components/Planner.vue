@@ -20,8 +20,8 @@ export default defineComponent({
     lists: db.collection("planner")
   },
   setup() {
-    const newListTitle = ref("");
     const lists = ref([]);
+    const newListTitle = ref("");
     function newList() {
       db.collection("planner").add({ title: newListTitle.value, items: [] });
       newListTitle.value = "";

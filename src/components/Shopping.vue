@@ -34,16 +34,36 @@ import { useBoughtLogic } from "./useBoughtLogic";
 
 export default defineComponent({
   name: "Shopping",
+  props: {
+    shopName: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     draggable
   },
   firestore: {
-    shop: db.collection("shops").doc("first shop"),
     bought: db.collection("bought"),
     planned: db.collection("planner")
   },
-  setup() {
+  setup(props) {
     const shop = ref<{ [k: string]: number }>({});
+    let unsubscribe: () => void = () => undefined;
+
+    onMounted(() => {
+      unsubscribe = db
+        .collection("shops")
+        .doc(props.shopName)
+        .onSnapshot(snapshot => {
+          shop.value = snapshot.data() as any;
+        });
+    });
+
+    onUnmounted(() => {
+      unsubscribe();
+    });
+
     const planned = ref<string[]>([]);
     const itemCount = computed(() => countBy(planned.value));
     const distinctItems = computed(() =>
@@ -64,7 +84,7 @@ export default defineComponent({
       itemCount,
       distinctItems,
       boughtDict,
-      ...useShoppingLogic(planned, shop, distinctItems),
+      ...useShoppingLogic(props.shopName, planned, shop, distinctItems),
       ...useBoughtLogic(boughtDict)
     };
   }
@@ -76,7 +96,7 @@ export default defineComponent({
   padding: 2px 4px;
 }
 ol {
-  padding: 0
+  padding: 0;
 }
 li {
   list-style: none;
