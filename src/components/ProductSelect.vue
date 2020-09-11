@@ -1,12 +1,5 @@
 <template>
   <div class="wrapper">
-    <select @change="onChange" class="product-select">
-      <option
-        v-for="product of productOptions"
-        :value="product.id"
-        :key="product.id"
-      >{{ product.id }}</option>
-    </select>
     <input
       type="text"
       class="product-input"
@@ -39,9 +32,9 @@ export default defineComponent({
   width: 100%;
   justify-content: space-between;
 }
-.product-select,
 .product-input {
-  width: 45%;
+  font-size: 1.25rem;
+  width: 100%;
   color: white;
   padding: 2px 4px;
   border: 2px solid white;

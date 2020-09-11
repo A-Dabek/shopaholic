@@ -94,6 +94,7 @@ export default defineComponent({
 <style scoped>
 .wrapper {
   padding: 2px 4px;
+  padding-right: 15%;
 }
 ol {
   padding: 0;

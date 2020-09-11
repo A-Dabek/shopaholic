@@ -34,6 +34,7 @@ export default defineComponent({
 <style scoped>
 li {
   text-align: left;
+  font-size: 1.25rem;
 }
 .count {
   float: right;

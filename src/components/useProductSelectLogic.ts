@@ -20,8 +20,6 @@ export function useProductSelectLogic(emit: (event: string, ...args: any[]) => v
     }
 
     return {
-        productOptions,
-        onChange,
         productName,
         onProductSubmit
     };

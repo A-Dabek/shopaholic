@@ -30,6 +30,13 @@ export function useListLogic(props: { data: ListData }) {
                 items: props.data.items.filter((_, index) => index !== foundIndex)
             });
     }
+    function resetList() {
+        db.collection("planner")
+            .doc(props.data.id)
+            .update({
+                items: []
+            });
+    }
     const itemCount = computed(() => countBy(props.data.items));
     const distinctItems = computed(() => Object.keys(itemCount.value).sort());
     return {
@@ -37,6 +44,7 @@ export function useListLogic(props: { data: ListData }) {
         distinctItems,
         addToList,
         removeFromList,
-        removeList
+        removeList,
+        resetList
     };
 }
