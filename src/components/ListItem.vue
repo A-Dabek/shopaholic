@@ -3,7 +3,7 @@
     <label class="name">{{ item }}</label>
     <span class="count">
       <fa-i icon="minus" @click=decrement></fa-i>
-      {{ count }}
+      <span class="text">{{ count }}</span>
       <fa-i icon="plus" @click=increment></fa-i>
     </span>
   </li>
@@ -38,5 +38,10 @@ li {
 }
 .count {
   float: right;
+}
+.count .text {
+  font-weight: bold;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 </style>

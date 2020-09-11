@@ -4,7 +4,7 @@
       <li
         v-for="(item, index) of distinctItems"
         :key="item"
-        :class="{'bought': boughtDict[item]}"
+        :class="{bought: boughtDict[item]}"
         @click="() => onItemClick(item)"
       >
         <fa-i v-if="shop[item] === undefined" icon="question"></fa-i>
@@ -93,20 +93,47 @@ export default defineComponent({
 
 <style scoped>
 .wrapper {
-  padding: 2px 4px;
-  padding-right: 15%;
+  border-left: 1.75rem double black;
+  border-right: 1.75rem double black;
 }
 ol {
   padding: 0;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 li {
   list-style: none;
   font-size: 1.25rem;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+li:nth-child(10n + 1) {
+  background: #dce775;
+  --var-color: #dce775;
+}
+li:nth-child(10n + 3) {
+  background: #4db6ac;
+  --var-color: #4db6ac;
+}
+li:nth-child(10n + 5) {
+  background: #a1887f;
+  --var-color: #a1887f;
+}
+li:nth-child(10n + 7) {
+  background: #f3cc74;
+  --var-color: #f3cc74;
+}
+li:nth-child(10n + 9) {
+  background: #e08a8a;
+  --var-color: #e08a8a;
 }
 li.bought {
   text-decoration: line-through;
 }
 .count {
   float: right;
+  font-weight: bold;
 }
 </style>

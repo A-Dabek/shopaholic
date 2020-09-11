@@ -9,7 +9,7 @@
       <label :class="{'selected': selected === 2}">Zakupy</label>
     </div>
     <div class="reset" @click="onReset">
-      <fa-i icon="undo"></fa-i>
+      <fa-i icon="sync" :spin="isDirty"></fa-i>
       <label>Reset</label>
     </div>
   </div>
@@ -18,12 +18,18 @@
 <script lang="ts">
 import Planner from "./components/Planner.vue";
 import Shopping from "./components/Shopping.vue";
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref, computed } from "@vue/composition-api";
 import { db } from "../firestore";
 
 export default defineComponent({
   name: "Heading",
+  firestore: {
+    bought: db.collection("bought"),
+  },
   setup(props, { emit }) {
+    const bought = ref<{ id: string }[]>([]);
+    const isDirty = computed<boolean>(() => bought.value.length > 0);
+
     const selected = ref(1);
     function onPlanning() {
       emit("planning");
@@ -36,27 +42,27 @@ export default defineComponent({
     function onReset() {
       db.collection("bought")
         .get()
-        .then(collection => {
-          collection.docs.forEach(doc =>
-            db
-              .collection("bought")
-              .doc(doc.id)
-              .delete()
+        .then((collection) => {
+          collection.docs.forEach((doc) =>
+            db.collection("bought").doc(doc.id).delete()
           );
         });
     }
     return {
+      bought,
       selected,
       onPlanning,
       onShopping,
-      onReset
+      onReset,
+      isDirty,
     };
-  }
+  },
 });
 </script>
 
 <style scoped>
 .wrapper {
+  font-size: 1.1rem;
   padding: 0px 10px 10px 10px;
   display: flex;
   justify-content: space-between;
