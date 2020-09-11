@@ -19,8 +19,17 @@ export function useShoppingLogic(
       .get()
       .then(snapshot => {
         planned.value = flatten(snapshot.docs.map(doc => doc.data().items));
-      });0
+      }); 0
   });
+
+  function getOrderedEntries() {
+    const orderedEntries = orderBy(Object.entries(shop.value), x => x[1]);
+    return [...orderedEntries, ...distinctItems
+      .value
+      .filter(x => shop.value[x] == null)
+      .map((x, index) => [x, index + orderedEntries.length] as [string, number])
+    ];
+  }
 
   function reset() {
     itemReordered.value = "";
@@ -30,8 +39,8 @@ export function useShoppingLogic(
   function onReorder(event: {
     moved: { element: string; oldIndex: number; newIndex: number };
   }) {
-    const distinctOrderedItems = distinctItems.value.filter(x => shop.value[x] != null)
-    const orderedEntries = orderBy(Object.entries(shop.value), x => x[1]);
+    const distinctOrderedItems = distinctItems.value.filter(x => shop.value[x] != null);
+    const orderedEntries = getOrderedEntries();
 
     const itemBefore = distinctOrderedItems[event.moved.newIndex - 1] || orderedEntries[0][0];
     const itemNext = distinctOrderedItems[event.moved.newIndex] || orderedEntries[orderedEntries.length - 1][0];
@@ -44,7 +53,7 @@ export function useShoppingLogic(
     // console.log(itemNext, indexOfItemNext);
     // console.log(itemReordered.value, itemsBetween.value);
 
-    if (newItemsBetween.length === 0) { 
+    if (newItemsBetween.length === 0) {
       if (event.moved.newIndex === 0) {
         reorder(event.moved.element, itemBefore, false);
       } else {
@@ -57,8 +66,7 @@ export function useShoppingLogic(
   }
 
   function reorder(first: string, second: string, reverse = true) {
-    const orderedEntries = orderBy(Object.entries(shop.value), x => x[1]);
-    const newOrderedEntries = orderedEntries
+    const newOrderedEntries = getOrderedEntries()
       .map(tuple => tuple[0])
       .filter(key => key !== first)
       .flatMap(key => key === second
