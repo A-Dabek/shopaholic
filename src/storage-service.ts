@@ -5,11 +5,14 @@ import { db } from './firestore';
 export class StorageService {
   static collections = {
     shops: db.collection('shops'),
+    product: db.collection('products'),
     bought: db.collection('bought'),
     toBuyList: (id: string) => db.collection('planner').doc(id),
     planner: db.collection('planner'),
-    alley: (shop: string) =>
+    alleys: (shop: string) =>
       StorageService.collections.shops.doc(shop).collection('alley'),
+    alley: (shop: string, alley: string) =>
+      StorageService.collections.shops.doc(shop).collection('alley').doc(),
   };
 
   getAlleys(shop: string, callback: (data: Alley[]) => void) {
@@ -41,20 +44,23 @@ export class StorageService {
 
   addAlley(shop: string, alley: string, order: number) {
     if (!alley) return;
-    StorageService.collections.alley(shop).doc(alley).set({ order, items: [] });
+    StorageService.collections
+      .alleys(shop)
+      .doc(alley)
+      .set({ order, items: [] });
   }
 
   setAlleyOrder(shop: string, alleys: string[]) {
     alleys.forEach((alley, index) => {
       StorageService.collections
-        .alley(shop)
+        .alleys(shop)
         .doc(alley)
         .update({ order: index });
     });
   }
 
   removeAlley(shop: string, alley: string) {
-    StorageService.collections.alley(shop).doc(alley).delete();
+    StorageService.collections.alleys(shop).doc(alley).delete();
   }
 
   removeAllBoughtItems() {

@@ -52,7 +52,6 @@ import {
   onMounted,
   computed,
   onUnmounted,
-  set,
 } from '@vue/composition-api';
 import { db } from '../firestore';
 import { countBy, orderBy } from 'lodash-es';
