@@ -5,7 +5,7 @@
       <fa-i
         class="action action-reset"
         icon="undo"
-        v-if="distinctItems.length > 0"
+        v-if="items.length > 0"
         @click="resetList"
       ></fa-i>
       <fa-i
@@ -16,29 +16,27 @@
     </h3>
     <ul>
       <ListItem
-        v-for="item of distinctItems"
-        :key="item"
+        v-for="item of items"
+        :key="item.name"
         :item="item"
-        :count="itemCount[item]"
-        @increment="() => addToList(item)"
-        @decrement="() => removeFromList(item)"
+        @remove="removeFromList(item.name)"
       />
     </ul>
-    <custom-input placeholder="Kolejny produkt" @submit="addToList" />
+    <ToBuyItem @submit="addToList" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import ListItem from './ListItem.vue';
-import CustomInput from '@/components/Input.vue';
+import ToBuyItem from './ToBuyItem.vue';
 import { ListData, useListLogic } from './useListLogic';
 
 export default defineComponent({
   name: 'List',
   components: {
     ListItem,
-    CustomInput,
+    ToBuyItem,
   },
   props: {
     data: {

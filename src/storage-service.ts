@@ -6,6 +6,7 @@ export class StorageService {
   static collections = {
     shops: db.collection('shops'),
     bought: db.collection('bought'),
+    toBuyList: (id: string) => db.collection('planner').doc(id),
     planner: db.collection('planner'),
     alley: (shop: string) =>
       StorageService.collections.shops.doc(shop).collection('alley'),

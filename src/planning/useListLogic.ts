@@ -1,42 +1,37 @@
-import { db } from '../firestore';
-import { computed } from '@vue/composition-api';
-import { countBy } from 'lodash-es';
+import { computed, watchEffect } from '@vue/composition-api';
+import { orderBy } from 'lodash-es';
+import { ItemToBuy } from './item-to-buy';
+import { StorageService } from '@/storage-service';
 
 export interface ListData {
   id: string;
-  items: string[];
+  items: ItemToBuy[];
   title: string;
 }
 
-export function useListLogic({ data }: { data: ListData }) {
+export function useListLogic(props: { data: ListData }) {
   function removeList() {
-    db.collection('planner').doc(data.id).delete();
+    StorageService.collections.toBuyList(props.data.id).delete();
   }
-  function addToList(item: string) {
-    db.collection('planner')
-      .doc(data.id)
-      .update({
-        items: [...data.items, item],
-      });
+  function addToList(item: ItemToBuy) {
+    StorageService.collections.toBuyList(props.data.id).update({
+      items: [...props.data.items, item],
+    });
   }
   function removeFromList(item: string) {
-    const foundIndex = data.items.findIndex(el => el === item);
-    db.collection('planner')
-      .doc(data.id)
-      .update({
-        items: data.items.filter((_, index) => index !== foundIndex),
-      });
+    const foundIndex = props.data.items.findIndex(el => el.name === item);
+    StorageService.collections.toBuyList(props.data.id).update({
+      items: props.data.items.filter((_, index) => index !== foundIndex),
+    });
   }
   function resetList() {
-    db.collection('planner').doc(data.id).update({
+    StorageService.collections.toBuyList(props.data.id).update({
       items: [],
     });
   }
-  const itemCount = computed(() => countBy(data.items));
-  const distinctItems = computed(() => Object.keys(itemCount.value).sort());
+  const items = computed(() => orderBy(props.data.items, item => item.name));
   return {
-    itemCount,
-    distinctItems,
+    items,
     addToList,
     removeFromList,
     removeList,
