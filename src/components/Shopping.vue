@@ -48,7 +48,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  reactive,
   ref,
   onMounted,
   computed,
@@ -56,7 +55,7 @@ import {
   set,
 } from '@vue/composition-api';
 import { db } from '../firestore';
-import { countBy, flatten, orderBy } from 'lodash-es';
+import { countBy, orderBy } from 'lodash-es';
 import draggable from 'vuedraggable';
 import { useShoppingLogic } from './useShoppingLogic';
 import { useBoughtLogic } from './useBoughtLogic';

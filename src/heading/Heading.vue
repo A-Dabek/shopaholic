@@ -75,6 +75,8 @@ export default defineComponent({
 a {
   text-decoration: none;
   color: inherit;
+  margin-right: 10px;
+  margin-bottom: 5px;
 }
 label {
   margin-left: 5px;

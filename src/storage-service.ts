@@ -1,3 +1,5 @@
+import { orderBy } from 'lodash-es';
+import { Alley } from './alley/alley';
 import { db } from './firestore';
 
 export class StorageService {
@@ -9,8 +11,17 @@ export class StorageService {
       StorageService.collections.shops.doc(shop).collection('alley'),
   };
 
-  getAlleys(shop: string) {
-    return StorageService.collections.shops.doc(shop).collection('alley');
+  getAlleys(shop: string, callback: (data: Alley[]) => void) {
+    return StorageService.collections.shops
+      .doc(shop)
+      .collection('alley')
+      .onSnapshot(snapshot => {
+        const data = orderBy(
+          snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Alley)),
+          'order'
+        );
+        callback(data);
+      });
   }
 
   addPlannerList(name: string) {
@@ -27,17 +38,18 @@ export class StorageService {
     StorageService.collections.shops.doc(name).delete();
   }
 
-  addAlley(shop: string, alley: string) {
+  addAlley(shop: string, alley: string, order: number) {
     if (!alley) return;
-    StorageService.collections
-      .alley(shop)
-      .doc(alley)
-      .set({ order: 0, items: [] });
+    StorageService.collections.alley(shop).doc(alley).set({ order, items: [] });
   }
 
-  setAlleyOrder(shop: string, alley: string, order: number) {
-    if (!name) return;
-    StorageService.collections.alley(shop).doc(alley).update({ order: 0 });
+  setAlleyOrder(shop: string, alleys: string[]) {
+    alleys.forEach((alley, index) => {
+      StorageService.collections
+        .alley(shop)
+        .doc(alley)
+        .update({ order: index });
+    });
   }
 
   removeAlley(shop: string, alley: string) {
