@@ -47,7 +47,7 @@ ul.rainbow {
   list-style: inside;
   padding: 0;
 }
-.rainbow li {
+li.rainbow-arc {
   display: flex;
   justify-content: space-between;
   font-size: 1.5rem;
@@ -56,23 +56,23 @@ ul.rainbow {
   margin-bottom: 10px;
   padding: 5px 10px;
 }
-.rainbow li:nth-child(5n + 1) {
+.rainbow-arc:nth-child(5n + 1) {
   background: #dce775;
   --var-color: #dce775;
 }
-.rainbow li:nth-child(5n + 2) {
+.rainbow-arc:nth-child(5n + 2) {
   background: #4db6ac;
   --var-color: #4db6ac;
 }
-.rainbow li:nth-child(5n + 3) {
+.rainbow-arc:nth-child(5n + 3) {
   background: #a1887f;
   --var-color: #a1887f;
 }
-.rainbow li:nth-child(5n + 4) {
+.rainbow-arc:nth-child(5n + 4) {
   background: #f3cc74;
   --var-color: #f3cc74;
 }
-.rainbow li:nth-child(5n) {
+.rainbow-arc:nth-child(5n) {
   background: #e08a8a;
   --var-color: #e08a8a;
 }

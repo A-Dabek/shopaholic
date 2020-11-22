@@ -4,7 +4,13 @@ export class StorageService {
   private readonly collection = {
     boughtItems: 'bought',
     shops: 'shops',
+    planner: 'planner',
   };
+
+  addPlannerList(name: string) {
+    if (!name) return;
+    db.collection(this.collection.planner).add({ title: name, items: [] });
+  }
 
   addShop(name: string) {
     if (!name) return;

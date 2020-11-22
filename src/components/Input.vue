@@ -28,17 +28,26 @@ export default defineComponent({
 
 <style scoped>
 .wrapper {
+  color: grey;
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
+  border-width: 2px;
+  border-style: inset;
+  border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+  border-image: initial;
 }
 .wrapper input {
   width: 100%;
-  padding: 2px 4px;
+  padding: 6px 4px;
+  outline: none !important;
+  border: none;
 }
 input::placeholder {
   font-style: italic;
 }
 .wrapper .icon {
   margin-left: 1rem;
+  margin-right: 0.5rem;
 }
 </style>

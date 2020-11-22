@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <ul class="rainbow">
-      <li v-for="shopItem of shops" :key="shopItem.id">
+      <li class="rainbow-arc" v-for="shopItem of shops" :key="shopItem.id">
         <span>{{ shopItem.id }}</span>
         <fa-i icon="times" @click.stop="() => removeShop(shopItem.id)"></fa-i>
       </li>
