@@ -3,6 +3,7 @@
     <Heading class="header" @navigation="onNavigation" />
     <Planner v-if="screen === screens.planner" />
     <ShopList v-else-if="screen === screens.shopping" />
+    <Shops v-else-if="screen === screens.shops" />
   </main>
 </template>
 
@@ -12,6 +13,7 @@ import ShopList from './components/ShopList.vue';
 import Planner from './components/Planner.vue';
 import Heading from './heading/Heading.vue';
 import { defineComponent, ref } from '@vue/composition-api';
+import Shops from './shops/Shops.vue';
 
 export default defineComponent({
   name: 'App',
@@ -19,6 +21,7 @@ export default defineComponent({
     ShopList,
     Planner,
     Heading,
+    Shops,
   },
   setup() {
     const screen = ref(Screen.planner);
@@ -39,5 +42,38 @@ export default defineComponent({
 }
 :root {
   --var-color: white;
+}
+ul.rainbow {
+  list-style: inside;
+  padding: 0;
+}
+.rainbow li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  color: white;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+}
+.rainbow li:nth-child(5n + 1) {
+  background: #dce775;
+  --var-color: #dce775;
+}
+.rainbow li:nth-child(5n + 2) {
+  background: #4db6ac;
+  --var-color: #4db6ac;
+}
+.rainbow li:nth-child(5n + 3) {
+  background: #a1887f;
+  --var-color: #a1887f;
+}
+.rainbow li:nth-child(5n + 4) {
+  background: #f3cc74;
+  --var-color: #f3cc74;
+}
+.rainbow li:nth-child(5n) {
+  background: #e08a8a;
+  --var-color: #e08a8a;
 }
 </style>
