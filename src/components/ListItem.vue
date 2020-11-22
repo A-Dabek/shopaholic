@@ -2,32 +2,32 @@
   <li>
     <label class="name">{{ item }}</label>
     <span class="count">
-      <fa-i icon="minus" @click=decrement></fa-i>
+      <fa-i icon="minus" @click="decrement"></fa-i>
       <span class="text">{{ count }}</span>
-      <fa-i icon="plus" @click=increment></fa-i>
+      <fa-i icon="plus" @click="increment"></fa-i>
     </span>
   </li>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/composition-api";
-import { db } from "../firestore";
+import { defineComponent, ref } from '@vue/composition-api';
+import { db } from '../firestore';
 export default defineComponent({
-  name: "ListItem",
+  name: 'ListItem',
   props: {
     item: String,
-    count: Number
+    count: Number,
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     return {
       increment() {
         emit('increment');
       },
       decrement() {
         emit('decrement');
-      }
+      },
     };
-  }
+  },
 });
 </script>
 

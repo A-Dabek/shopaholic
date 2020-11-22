@@ -2,8 +2,17 @@
   <div class="wrapper">
     <h3 class="header">
       <label class="title">{{ data.title }}</label>
-      <fa-i class="action action-reset" icon="undo" v-if="distinctItems.length > 0"  @click="resetList"></fa-i>
-      <fa-i class="action action-remove" icon="times" @click="removeList"></fa-i>
+      <fa-i
+        class="action action-reset"
+        icon="undo"
+        v-if="distinctItems.length > 0"
+        @click="resetList"
+      ></fa-i>
+      <fa-i
+        class="action action-remove"
+        icon="times"
+        @click="removeList"
+      ></fa-i>
     </h3>
     <ul>
       <ListItem
@@ -20,13 +29,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
-import ListItem from "./ListItem.vue";
-import ProductSelect from "./ProductSelect.vue";
-import { ListData, useListLogic } from "./useListLogic";
+import { defineComponent } from '@vue/composition-api';
+import ListItem from './ListItem.vue';
+import ProductSelect from './ProductSelect.vue';
+import { ListData, useListLogic } from './useListLogic';
 
 export default defineComponent({
-  name: "List",
+  name: 'List',
   components: {
     ListItem,
     ProductSelect,

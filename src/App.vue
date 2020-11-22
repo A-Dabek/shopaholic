@@ -1,30 +1,35 @@
 <template>
-  <div id="app">
-    <Heading class="header" @planning="planning=true" @shopping="planning=false" />
-    <Planner v-if="planning" />
-    <ShopList v-else />
-  </div>
+  <main id="app">
+    <Heading class="header" @navigation="onNavigation" />
+    <Planner v-if="screen === screens.planner" />
+    <ShopList v-else-if="screen === screens.shopping" />
+  </main>
 </template>
 
 <script lang="ts">
-import ShopList from "./components/ShopList.vue";
-import Planner from "./components/Planner.vue";
-import Heading from "./components/Heading.vue";
-import { defineComponent, ref } from "@vue/composition-api";
+import { Screen } from './heading/screens';
+import ShopList from './components/ShopList.vue';
+import Planner from './components/Planner.vue';
+import Heading from './heading/Heading.vue';
+import { defineComponent, ref } from '@vue/composition-api';
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   components: {
     ShopList,
     Planner,
-    Heading
+    Heading,
   },
   setup() {
-    const planning = ref(true);
+    const screen = ref(Screen.planner);
     return {
-      planning
+      screens: Screen,
+      screen,
+      onNavigation: (newScreen: Screen) => {
+        screen.value = newScreen;
+      },
     };
-  }
+  },
 });
 </script>
 

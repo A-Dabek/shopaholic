@@ -1,10 +1,6 @@
-
-import {
-  Ref, onMounted
-} from "@vue/composition-api";
-import { db } from "../firestore";
-import { flatten, orderBy } from "lodash-es";
-
+import { Ref, onMounted } from '@vue/composition-api';
+import { db } from '../firestore';
+import { flatten, orderBy } from 'lodash-es';
 
 export function useShoppingLogic(
   shopName: string,
@@ -15,38 +11,51 @@ export function useShoppingLogic(
   itemsBetween: Ref<string[]>
 ) {
   onMounted(() => {
-    db.collection("planner")
+    db.collection('planner')
       .get()
       .then(snapshot => {
         planned.value = flatten(snapshot.docs.map(doc => doc.data().items));
-      }); 0
+      });
+    0;
   });
 
   function getOrderedEntries() {
     const orderedEntries = orderBy(Object.entries(shop.value), x => x[1]);
-    return [...orderedEntries, ...distinctItems
-      .value
-      .filter(x => shop.value[x] == null)
-      .map((x, index) => [x, index + orderedEntries.length] as [string, number])
+    return [
+      ...orderedEntries,
+      ...distinctItems.value
+        .filter(x => shop.value[x] == null)
+        .map(
+          (x, index) => [x, index + orderedEntries.length] as [string, number]
+        ),
     ];
   }
 
   function reset() {
-    itemReordered.value = "";
+    itemReordered.value = '';
     itemsBetween.value = [];
   }
 
   function onReorder(event: {
     moved: { element: string; oldIndex: number; newIndex: number };
   }) {
-    const distinctOrderedItems = distinctItems.value.filter(x => shop.value[x] != null);
+    const distinctOrderedItems = distinctItems.value.filter(
+      x => shop.value[x] != null
+    );
     const orderedEntries = getOrderedEntries();
 
-    const itemBefore = distinctOrderedItems[event.moved.newIndex - 1] || orderedEntries[0][0];
-    const itemNext = distinctOrderedItems[event.moved.newIndex] || orderedEntries[orderedEntries.length - 1][0];
-    const indexOfItemBefore = orderedEntries.findIndex(it => it[0] === itemBefore);
+    const itemBefore =
+      distinctOrderedItems[event.moved.newIndex - 1] || orderedEntries[0][0];
+    const itemNext =
+      distinctOrderedItems[event.moved.newIndex] ||
+      orderedEntries[orderedEntries.length - 1][0];
+    const indexOfItemBefore = orderedEntries.findIndex(
+      it => it[0] === itemBefore
+    );
     const indexOfItemNext = orderedEntries.findIndex(it => it[0] === itemNext);
-    const newItemsBetween = orderedEntries.slice(indexOfItemBefore + 1, indexOfItemNext).map(i => i[0]);
+    const newItemsBetween = orderedEntries
+      .slice(indexOfItemBefore + 1, indexOfItemNext)
+      .map(i => i[0]);
 
     // console.log(orderedEntries);
     // console.log(itemBefore, indexOfItemBefore);
@@ -69,15 +78,12 @@ export function useShoppingLogic(
     const newOrderedEntries = getOrderedEntries()
       .map(tuple => tuple[0])
       .filter(key => key !== first)
-      .flatMap(key => key === second
-        ? reverse ? [key, first] : [first, key]
-        : [key]
+      .flatMap(key =>
+        key === second ? (reverse ? [key, first] : [first, key]) : [key]
       )
       .map((key, index) => [key, index]);
     const newShopOrder = Object.fromEntries(newOrderedEntries);
-    db.collection("shops")
-      .doc(shopName)
-      .set(newShopOrder);
+    db.collection('shops').doc(shopName).set(newShopOrder);
     reset();
   }
 
@@ -86,14 +92,12 @@ export function useShoppingLogic(
       Object.entries(shop.value).filter(([key]) => key !== item)
     );
     itemsBetween.value = itemsBetween.value.filter(key => key !== item);
-    db.collection("shops")
-      .doc(shopName)
-      .set(newShopOrder);
+    db.collection('shops').doc(shopName).set(newShopOrder);
   }
 
   return {
     onReorder,
     reorder,
-    removeFromList
-  }
+    removeFromList,
+  };
 }

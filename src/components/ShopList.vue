@@ -2,52 +2,56 @@
   <div class="wrapper">
     <Shopping v-if="!!shop" :shopName="shop" />
     <ul v-else>
-      <li v-for="shopItem of shops" :key="shopItem.id" @click="shop = shopItem.id">
-        <span>{{shopItem.id}}</span>
+      <li
+        v-for="shopItem of shops"
+        :key="shopItem.id"
+        @click="shop = shopItem.id"
+      >
+        <span>{{ shopItem.id }}</span>
         <fa-i icon="times" @click.stop="() => removeShop(shopItem.id)"></fa-i>
       </li>
     </ul>
-    <input placeholder="Nowy sklep" v-model="newShopName" @keydown.enter="newShop" />
+    <input
+      placeholder="Nowy sklep"
+      v-model="newShopName"
+      @keydown.enter="newShop"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import Shopping from "./Shopping.vue";
-import { defineComponent, ref } from "@vue/composition-api";
-import { db } from "../firestore";
+import Shopping from './Shopping.vue';
+import { defineComponent, ref } from '@vue/composition-api';
+import { db } from '../firestore';
 
 export default defineComponent({
-  name: "ShopList",
+  name: 'ShopList',
   components: {
-    Shopping
+    Shopping,
   },
   firestore: {
-    shops: db.collection("shops")
+    shops: db.collection('shops'),
   },
   setup() {
-    const shop = ref("");
+    const shop = ref('');
     const shops = ref<string[]>([]);
-    const newShopName = ref("");
+    const newShopName = ref('');
     function newShop() {
       if (!newShopName.value) return;
-      db.collection("shops")
-        .doc(newShopName.value)
-        .set({});
-      newShopName.value = "";
+      db.collection('shops').doc(newShopName.value).set({});
+      newShopName.value = '';
     }
     function removeShop(id: string) {
-      db.collection("shops")
-        .doc(id)
-        .delete();
+      db.collection('shops').doc(id).delete();
     }
     return {
       shop,
       shops,
       newShopName,
       newShop,
-      removeShop
+      removeShop,
     };
-  }
+  },
 });
 </script>
 
