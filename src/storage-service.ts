@@ -5,7 +5,13 @@ export class StorageService {
     shops: db.collection('shops'),
     bought: db.collection('bought'),
     planner: db.collection('planner'),
+    alley: (shop: string) =>
+      StorageService.collections.shops.doc(shop).collection('alley'),
   };
+
+  getAlleys(shop: string) {
+    return StorageService.collections.shops.doc(shop).collection('alley');
+  }
 
   addPlannerList(name: string) {
     if (!name) return;
@@ -17,8 +23,25 @@ export class StorageService {
     StorageService.collections.shops.doc(name).set({});
   }
 
-  removeShop(id: string) {
-    StorageService.collections.shops.doc(id).delete();
+  removeShop(name: string) {
+    StorageService.collections.shops.doc(name).delete();
+  }
+
+  addAlley(shop: string, alley: string) {
+    if (!alley) return;
+    StorageService.collections
+      .alley(shop)
+      .doc(alley)
+      .set({ order: 0, items: [] });
+  }
+
+  setAlleyOrder(shop: string, alley: string, order: number) {
+    if (!name) return;
+    StorageService.collections.alley(shop).doc(alley).update({ order: 0 });
+  }
+
+  removeAlley(shop: string, alley: string) {
+    StorageService.collections.alley(shop).doc(alley).delete();
   }
 
   removeAllBoughtItems() {

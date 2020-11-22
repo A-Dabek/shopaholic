@@ -25,17 +25,10 @@ export default defineComponent({
   },
   setup() {
     const storage = new StorageService();
-    const shops = ref<string[]>([]);
-    function newShop(name: string) {
-      storage.addShop(name);
-    }
-    function removeShop(id: string) {
-      storage.removeShop(id);
-    }
     return {
-      shops,
-      newShop,
-      removeShop,
+      shops: ref<string[]>([]),
+      newShop: (name: string) => storage.addShop(name),
+      removeShop: (id: string) => storage.removeShop(id),
     };
   },
 });

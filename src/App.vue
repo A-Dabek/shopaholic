@@ -4,6 +4,7 @@
     <Planner v-if="screen === screens.planner" />
     <ShopList v-else-if="screen === screens.shopping" />
     <Shops v-else-if="screen === screens.shops" />
+    <Alley v-else-if="screen === screens.alleys" />
   </main>
 </template>
 
@@ -14,10 +15,12 @@ import Planner from './planning/Planner.vue';
 import Heading from './heading/Heading.vue';
 import { defineComponent, ref } from '@vue/composition-api';
 import Shops from './shops/Shops.vue';
+import Alley from './alley/Alley.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
+    Alley,
     ShopList,
     Planner,
     Heading,
@@ -46,6 +49,9 @@ export default defineComponent({
 ul.rainbow {
   list-style: inside;
   padding: 0;
+}
+li {
+  text-transform: capitalize;
 }
 li.rainbow-arc {
   display: flex;
