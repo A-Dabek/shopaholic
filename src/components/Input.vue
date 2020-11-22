@@ -8,7 +8,6 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import List from './List.vue';
-import ProductSelect from './ProductSelect.vue';
 
 export default defineComponent({
   name: 'CustomInput',
@@ -18,7 +17,7 @@ export default defineComponent({
     return {
       value,
       submit: () => {
-        emit('submit', value.value.trim());
+        emit('submit', value.value.trim().toLowerCase());
         value.value = '';
       },
     };

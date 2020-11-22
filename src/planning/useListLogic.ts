@@ -8,31 +8,31 @@ export interface ListData {
   title: string;
 }
 
-export function useListLogic(props: { data: ListData }) {
+export function useListLogic({ data }: { data: ListData }) {
   function removeList() {
-    db.collection('planner').doc(props.data.id).delete();
+    db.collection('planner').doc(data.id).delete();
   }
   function addToList(item: string) {
     db.collection('planner')
-      .doc(props.data.id)
+      .doc(data.id)
       .update({
-        items: [...props.data.items, item],
+        items: [...data.items, item],
       });
   }
   function removeFromList(item: string) {
-    const foundIndex = props.data.items.findIndex(el => el === item);
+    const foundIndex = data.items.findIndex(el => el === item);
     db.collection('planner')
-      .doc(props.data.id)
+      .doc(data.id)
       .update({
-        items: props.data.items.filter((_, index) => index !== foundIndex),
+        items: data.items.filter((_, index) => index !== foundIndex),
       });
   }
   function resetList() {
-    db.collection('planner').doc(props.data.id).update({
+    db.collection('planner').doc(data.id).update({
       items: [],
     });
   }
-  const itemCount = computed(() => countBy(props.data.items));
+  const itemCount = computed(() => countBy(data.items));
   const distinctItems = computed(() => Object.keys(itemCount.value).sort());
   return {
     itemCount,

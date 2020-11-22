@@ -13,9 +13,7 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import List from './List.vue';
-import ProductSelect from './ProductSelect.vue';
-import CustomInput from './Input.vue';
-import { db } from '../firestore';
+import CustomInput from '../components/Input.vue';
 import { StorageService } from '@/storage-service';
 
 export default defineComponent({
@@ -25,7 +23,7 @@ export default defineComponent({
     CustomInput,
   },
   firestore: {
-    lists: db.collection('planner'),
+    lists: StorageService.collections.planner,
   },
   setup() {
     const storage = new StorageService();

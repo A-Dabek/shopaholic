@@ -1,33 +1,31 @@
 import { db } from './firestore';
 
 export class StorageService {
-  private readonly collection = {
-    boughtItems: 'bought',
-    shops: 'shops',
-    planner: 'planner',
+  static collections = {
+    shops: db.collection('shops'),
+    bought: db.collection('bought'),
+    planner: db.collection('planner'),
   };
 
   addPlannerList(name: string) {
     if (!name) return;
-    db.collection(this.collection.planner).add({ title: name, items: [] });
+    StorageService.collections.planner.add({ title: name, items: [] });
   }
 
   addShop(name: string) {
     if (!name) return;
-    db.collection(this.collection.shops).doc(name).set({});
+    StorageService.collections.shops.doc(name).set({});
   }
 
   removeShop(id: string) {
-    db.collection(this.collection.shops).doc(id).delete();
+    StorageService.collections.shops.doc(id).delete();
   }
 
   removeAllBoughtItems() {
-    db.collection(this.collection.boughtItems)
-      .get()
-      .then(collection => {
-        collection.docs.forEach(doc =>
-          db.collection(this.collection.boughtItems).doc(doc.id).delete()
-        );
-      });
+    StorageService.collections.bought.get().then(collection => {
+      collection.docs.forEach(doc =>
+        StorageService.collections.bought.doc(doc.id).delete()
+      );
+    });
   }
 }

@@ -10,7 +10,7 @@
 <script lang="ts">
 import { Screen } from './heading/screens';
 import ShopList from './components/ShopList.vue';
-import Planner from './components/Planner.vue';
+import Planner from './planning/Planner.vue';
 import Heading from './heading/Heading.vue';
 import { defineComponent, ref } from '@vue/composition-api';
 import Shops from './shops/Shops.vue';

@@ -24,21 +24,21 @@
         @decrement="() => removeFromList(item)"
       />
     </ul>
-    <ProductSelect @select="addToList" />
+    <custom-input placeholder="Kolejny produkt" @submit="addToList" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import ListItem from './ListItem.vue';
-import ProductSelect from './ProductSelect.vue';
+import CustomInput from '@/components/Input.vue';
 import { ListData, useListLogic } from './useListLogic';
 
 export default defineComponent({
   name: 'List',
   components: {
     ListItem,
-    ProductSelect,
+    CustomInput,
   },
   props: {
     data: {

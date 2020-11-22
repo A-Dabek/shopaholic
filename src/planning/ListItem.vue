@@ -10,8 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
-import { db } from '../firestore';
+import { defineComponent } from '@vue/composition-api';
 export default defineComponent({
   name: 'ListItem',
   props: {

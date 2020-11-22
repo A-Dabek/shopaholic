@@ -1,8 +1,9 @@
 <template>
   <div class="wrapper">
     <Shopping v-if="!!shop" :shopName="shop" />
-    <ul v-else>
+    <ul class="rainbow" v-else>
       <li
+        class="rainbow-arc"
         v-for="shopItem of shops"
         :key="shopItem.id"
         @click="shop = shopItem.id"
@@ -66,34 +67,5 @@ input::placeholder {
 ul {
   list-style: inside;
   padding: 0;
-}
-li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.5rem;
-  color: white;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 5px 10px;
-}
-li:nth-child(5n + 1) {
-  background: #dce775;
-  --var-color: #dce775;
-}
-li:nth-child(5n + 2) {
-  background: #4db6ac;
-  --var-color: #4db6ac;
-}
-li:nth-child(5n + 3) {
-  background: #a1887f;
-  --var-color: #a1887f;
-}
-li:nth-child(5n + 4) {
-  background: #f3cc74;
-  --var-color: #f3cc74;
-}
-li:nth-child(5n) {
-  background: #e08a8a;
-  --var-color: #e08a8a;
 }
 </style>
