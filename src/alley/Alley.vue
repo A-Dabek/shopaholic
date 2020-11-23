@@ -6,12 +6,14 @@
       :shop="shop"
       @pick="name => (alley = name)"
     />
+    <alley-items v-else :shop="shop" :alley="alley" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import ShopPicker from '../shops/ShopPicker.vue';
+import AlleyItems from './AlleyItems.vue';
 import AlleyPicker from './AlleyPicker.vue';
 
 export default defineComponent({
@@ -19,6 +21,7 @@ export default defineComponent({
   components: {
     ShopPicker,
     AlleyPicker,
+    AlleyItems,
   },
   setup() {
     const shop = ref('');

@@ -18,6 +18,7 @@ import {
   faSync,
   faStore,
   faPencilAlt,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -34,7 +35,8 @@ library.add(
   faUndo,
   faShoppingBasket,
   faStore,
-  faPencilAlt
+  faPencilAlt,
+  faTrash
 );
 
 Vue.use(VueCompositionApi);

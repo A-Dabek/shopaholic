@@ -12,7 +12,7 @@ export class StorageService {
     alleys: (shop: string) =>
       StorageService.collections.shops.doc(shop).collection('alley'),
     alley: (shop: string, alley: string) =>
-      StorageService.collections.shops.doc(shop).collection('alley').doc(),
+      StorageService.collections.shops.doc(shop).collection('alley').doc(alley),
   };
 
   getAlleys(shop: string, callback: (data: Alley[]) => void) {
