@@ -54,7 +54,7 @@ import { Alley } from '@/alley/alley';
 export default defineComponent({
   name: 'Shopping',
   props: {
-    shopName: {
+    shop: {
       type: String,
       required: true,
     },
@@ -66,7 +66,7 @@ export default defineComponent({
     const alleys = ref<Alley[]>([]);
     watchEffect(() => {
       return StorageService.collections
-        .alleys(props.shopName)
+        .alleys(props.shop)
         .onSnapshot(snapshot => {
           alleys.value = snapshot.docs.map(doc => ({
             id: doc.id,

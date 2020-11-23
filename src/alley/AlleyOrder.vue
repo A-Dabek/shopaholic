@@ -29,6 +29,7 @@ export default defineComponent({
     draggable,
   },
   props: ['shop'],
+  inject: ['shopStore'],
   setup(props: { shop: string }) {
     const storage = new StorageService();
     const alleys = ref<Alley[]>([]);

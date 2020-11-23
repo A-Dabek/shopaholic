@@ -1,31 +1,44 @@
 <template>
   <main id="app">
     <Heading class="header" @navigation="onNavigation" />
-    <Planner v-if="screen === screens.planner" />
-    <ShopList v-else-if="screen === screens.shopping" />
-    <Shops v-else-if="screen === screens.shops" />
-    <Alley v-else-if="screen === screens.alleys" />
+    <Shops v-if="screen === screens.shops" />
+    <alley-order
+      v-else-if="screen === screens.alleys"
+      :shop="shopStore.state.shop"
+    />
+    <Alley
+      v-else-if="screen === screens.products"
+      :shop="shopStore.state.shop"
+    />
+    <Planner v-else-if="screen === screens.planner" />
+    <Shopping
+      v-else-if="screen === screens.shopping"
+      :shop="shopStore.state.shop"
+    />
   </main>
 </template>
 
 <script lang="ts">
 import { Screen } from './heading/screens';
-import ShopList from './components/ShopList.vue';
 import Planner from './planning/Planner.vue';
 import Heading from './heading/Heading.vue';
 import { defineComponent, ref } from '@vue/composition-api';
 import Shops from './shops/Shops.vue';
 import Alley from './alley/Alley.vue';
+import AlleyOrder from './alley/AlleyOrder.vue';
+import Shopping from './components/Shopping.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     Alley,
-    ShopList,
+    Shopping,
     Planner,
     Heading,
     Shops,
+    AlleyOrder,
   },
+  inject: ['shopStore'],
   setup() {
     const screen = ref(Screen.planner);
     return {

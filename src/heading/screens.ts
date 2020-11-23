@@ -1,6 +1,7 @@
 export enum Screen {
-    planner,
-    shops,
-    alleys,
-    shopping
+  planner,
+  shops,
+  alleys,
+  shopping,
+  products,
 }
