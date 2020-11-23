@@ -1,47 +1,38 @@
 <template>
   <div class="wrapper">
-    <draggable
-      :value="distinctItems"
-      tag="ol"
-      @change="onReorder"
-      fallbackTolerance="5"
-    >
+    <ol>
       <li
-        v-for="(item, index) of distinctItems"
-        :key="item"
+        v-for="(item, index) of orderedItemsToBuy"
+        :key="item.name"
         class="shopping-item"
-        :class="{ bought: boughtDict[item] }"
       >
-        <div class="shopping-item-wrapper" @click="() => onItemClick(item)">
-          <fa-i v-if="shop[item] === undefined" icon="question"></fa-i>
-          <span v-else>{{ index + 1 }}.</span>
-          {{ item }}
-          <span class="count">{{ itemCount[item] }}</span>
-        </div>
-
-        <ol v-if="item === itemReordered">
-          <li @click="reorder(item, itemsBetween[0], false)">
-            {{ index + 1 }}. Pierwszy
-          </li>
-          <li
-            v-for="(nestedItem, nestedIndex) of itemsBetween"
-            :key="nestedItem"
-            class="reorder-list-item"
-          >
-            <div class="order-item-wrapper">
-              <label @click="reorder(item, nestedItem)"
-                >{{ index + nestedIndex + 2 }}. {{ nestedItem }}</label
-              >
-              <fa-i
-                class="remove-item"
-                icon="times"
-                @click="removeFromList(nestedItem)"
-              ></fa-i>
-            </div>
-          </li>
-        </ol>
+        <label
+          class="shopping-item-wrapper rainbow-arc"
+          @click="onItemClick(item.name)"
+        >
+          <span>{{ index + 1 }}. {{ item.name }}</span>
+          <span class="count">{{ item.quantity }}{{ item.unit }}</span>
+          <span class="details">{{ item.details }}</span>
+        </label>
       </li>
-    </draggable>
+    </ol>
+
+    <ul>
+      <li
+        v-for="item of boughtItems"
+        :key="item.id"
+        class="shopping-item bought"
+      >
+        <label
+          class="shopping-item-wrapper rainbow-arc"
+          @click="onItemClick(item.name)"
+        >
+          <span>{{ item.name }}</span>
+          <span class="count">{{ item.quantity }}{{ item.unit }}</span>
+          <span class="details">{{ item.details }}</span>
+        </label>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -51,13 +42,14 @@ import {
   ref,
   onMounted,
   computed,
-  onUnmounted,
+  watchEffect,
 } from '@vue/composition-api';
 import { db } from '../firestore';
-import { countBy, orderBy } from 'lodash-es';
-import draggable from 'vuedraggable';
-import { useShoppingLogic } from './useShoppingLogic';
+import { flatten, orderBy } from 'lodash-es';
 import { useBoughtLogic } from './useBoughtLogic';
+import { ItemToBuy } from '@/planning/item-to-buy';
+import { StorageService } from '@/storage-service';
+import { Alley } from '@/alley/alley';
 
 export default defineComponent({
   name: 'Shopping',
@@ -67,35 +59,31 @@ export default defineComponent({
       required: true,
     },
   },
-  components: {
-    draggable,
-  },
   firestore: {
     bought: db.collection('bought'),
-    planned: db.collection('planner'),
   },
   setup(props) {
-    const shop = ref<{ [k: string]: number }>({});
-    let unsubscribe: () => void = () => undefined;
-
-    onMounted(() => {
-      unsubscribe = db
-        .collection('shops')
-        .doc(props.shopName)
+    const alleys = ref<Alley[]>([]);
+    watchEffect(() => {
+      return StorageService.collections
+        .alleys(props.shopName)
         .onSnapshot(snapshot => {
-          shop.value = snapshot.data() as any;
+          alleys.value = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as Alley[];
+          alleys.value = orderBy(alleys.value, a => a.order);
         });
     });
 
-    onUnmounted(() => {
-      unsubscribe();
+    const planned = ref<ItemToBuy[]>([]);
+    onMounted(() => {
+      StorageService.collections.planner.get().then(snapshot => {
+        planned.value = flatten(
+          snapshot.docs.map(doc => doc.data().items)
+        ) as ItemToBuy[];
+      });
     });
-
-    const planned = ref<string[]>([]);
-    const itemCount = computed(() => countBy(planned.value));
-    const distinctItems = computed(() =>
-      orderBy(Object.keys(itemCount.value), x => shop.value[x])
-    );
 
     const bought = ref<{ id: string }[]>([]);
     const boughtDict = computed<{ [k: string]: boolean }>(() =>
@@ -104,26 +92,26 @@ export default defineComponent({
         .reduce((prev, curr) => ({ ...prev, [curr]: true }), {})
     );
 
-    const itemReordered = ref<string>('');
-    const itemsBetween = ref<string[]>([]);
+    const boughtItems = computed(() => {
+      return planned.value.filter(item => boughtDict.value[item.name]);
+    });
+
+    const orderedItemsToBuy = computed(() => {
+      const itemsToBuy = planned.value.filter(
+        item => !bought.value.some(b => b.id === item.name)
+      );
+      return orderBy(itemsToBuy, item =>
+        alleys.value.findIndex(a => a.items.includes(item.name))
+      );
+    });
 
     return {
-      itemReordered,
-      itemsBetween,
-      bought,
+      alleys,
       planned,
-      shop,
-      itemCount,
-      distinctItems,
+      bought,
       boughtDict,
-      ...useShoppingLogic(
-        props.shopName,
-        planned,
-        shop,
-        distinctItems,
-        itemReordered,
-        itemsBetween
-      ),
+      boughtItems,
+      orderedItemsToBuy,
       ...useBoughtLogic(boughtDict),
     };
   },
@@ -132,10 +120,11 @@ export default defineComponent({
 
 <style scoped>
 .wrapper {
-  border-left: 1.75rem double black;
-  border-right: 1.75rem double black;
+  border-left: 1.75rem double grey;
+  border-right: 1.75rem double grey;
 }
-ol {
+ol,
+ul {
   padding: 0;
   padding-right: 5px;
   padding-left: 5px;
@@ -148,44 +137,18 @@ li {
   padding-right: 5px;
   padding-left: 5px;
 }
-li.shopping-item:nth-child(10n + 1) div.shopping-item-wrapper {
-  background: #dce775;
-  --var-color: #dce775;
-}
-li.shopping-item:nth-child(10n + 3) div.shopping-item-wrapper {
-  background: #4db6ac;
-  --var-color: #4db6ac;
-}
-li.shopping-item:nth-child(10n + 5) div.shopping-item-wrapper {
-  background: #a1887f;
-  --var-color: #a1887f;
-}
-li.shopping-item:nth-child(10n + 7) div.shopping-item-wrapper {
-  background: #f3cc74;
-  --var-color: #f3cc74;
-}
-li.shopping-item:nth-child(10n + 9) div.shopping-item-wrapper {
-  background: #e08a8a;
-  --var-color: #e08a8a;
-}
 li.bought {
   text-decoration: line-through;
+}
+.shopping-item-wrapper {
+  display: block;
 }
 .count {
   float: right;
   font-weight: bold;
 }
-.order-item-wrapper {
-  display: flex;
-  align-items: baseline;
-}
-.order-item-wrapper label {
-  flex-grow: 1;
-}
-.remove-item {
-  width: 15%;
-  align-self: right;
-  flex-grow: 0;
-  margin-left: 15px;
+.details {
+  display: block;
+  font-size: 0.9rem;
 }
 </style>

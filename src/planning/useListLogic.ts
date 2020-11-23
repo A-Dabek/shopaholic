@@ -14,6 +14,7 @@ export function useListLogic(props: { data: ListData }) {
     StorageService.collections.toBuyList(props.data.id).delete();
   }
   function addToList(item: ItemToBuy) {
+    StorageService.collections.product.doc(item.name).set({});
     StorageService.collections.toBuyList(props.data.id).update({
       items: [...props.data.items, item],
     });

@@ -5,6 +5,7 @@ import { db } from './firestore';
 export class StorageService {
   static collections = {
     shops: db.collection('shops'),
+    shop: (name: string) => db.collection('shops').doc(name),
     product: db.collection('products'),
     bought: db.collection('bought'),
     toBuyList: (id: string) => db.collection('planner').doc(id),
