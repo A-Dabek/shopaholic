@@ -10,7 +10,7 @@
       v-else-if="screen === screens.products"
       :shop="shopStore.state.shop"
     />
-    <Planner v-else-if="screen === screens.planner" />
+    <planner v-else-if="screen === screens.planner" />
     <Shopping
       v-else-if="screen === screens.shopping"
       :shop="shopStore.state.shop"
@@ -20,7 +20,6 @@
 
 <script lang="ts">
 import { Screen } from './heading/screens';
-import Planner from './planning/Planner.vue';
 import Heading from './heading/Heading.vue';
 import { defineComponent, provide, ref } from '@vue/composition-api';
 import Alley from './alley/Alley.vue';
@@ -28,20 +27,23 @@ import AlleyOrder from './alley/AlleyOrder.vue';
 import Shopping from './components/Shopping.vue';
 import Shops from './feature/shops/Shops.vue';
 import { ShopRepositoryFirestore } from './repository/shop-repository-firestore';
+import Planner from './feature/planning/Planner.vue';
+import { PlanListRepositoryFirestore } from './repository/plan-list-repository-firestore';
 
 export default defineComponent({
   name: 'App',
   components: {
     Alley,
     Shopping,
-    Planner,
     Heading,
     Shops,
     AlleyOrder,
+    Planner,
   },
   inject: ['shopStore'],
   setup() {
     provide('shopRepository', new ShopRepositoryFirestore());
+    provide('planListRepository', new PlanListRepositoryFirestore());
     const screen = ref(Screen.planner);
     return {
       screens: Screen,
@@ -96,5 +98,8 @@ li.rainbow-arc {
 .rainbow-arc:nth-child(5n) {
   background: #e08a8a;
   --var-color: #e08a8a;
+}
+input::placeholder {
+  font-style: italic;
 }
 </style>

@@ -46,9 +46,9 @@ import {
 } from '@vue/composition-api';
 import { flatten, orderBy } from 'lodash-es';
 import { useBoughtLogic } from './useBoughtLogic';
-import { ItemToBuy } from '@/planning/item-to-buy';
 import { Alley } from '@/alley/alley';
 import { StorageService } from '@/repository/storage-service';
+import { PlanListItem } from '@/feature/planning/model';
 
 export default defineComponent({
   name: 'Shopping',
@@ -75,12 +75,12 @@ export default defineComponent({
         });
     });
 
-    const planned = ref<ItemToBuy[]>([]);
+    const planned = ref<PlanListItem[]>([]);
     onMounted(() => {
       StorageService.collections.planner.get().then(snapshot => {
         planned.value = flatten(
           snapshot.docs.map(doc => doc.data().items)
-        ) as ItemToBuy[];
+        ) as PlanListItem[];
       });
     });
 

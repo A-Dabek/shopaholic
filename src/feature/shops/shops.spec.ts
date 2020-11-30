@@ -33,7 +33,7 @@ describe('Shops', () => {
     expect(query.items().length).to.eq(shops.length);
   }
 
-  describe('when adding new shop', () => {
+  describe('when adding a shop', () => {
     it('should add to collection on submit', async () => {
       setup();
       await fireEvent.update(query.input(), 'new shop');

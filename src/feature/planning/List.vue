@@ -22,25 +22,26 @@
         @remove="removeFromList(item.name)"
       />
     </ul>
-    <ToBuyItem @submit="addToList" />
+    <item-form @submit="addToList" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import ItemForm from './ItemForm.vue';
 import ListItem from './ListItem.vue';
-import ToBuyItem from './ToBuyItem.vue';
-import { ListData, useListLogic } from './useListLogic';
+import { PlanList } from './model';
+import { useListLogic } from './useListLogic';
 
 export default defineComponent({
   name: 'List',
   components: {
     ListItem,
-    ToBuyItem,
+    ItemForm,
   },
   props: {
     data: {
-      type: Object as () => ListData,
+      type: Object as () => PlanList,
       required: true,
     },
   },

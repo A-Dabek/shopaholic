@@ -29,11 +29,6 @@ export class StorageService {
       });
   }
 
-  addPlannerList(name: string) {
-    if (!name) return;
-    StorageService.collections.planner.add({ title: name, items: [] });
-  }
-
   addAlley(shop: string, alley: string, order: number) {
     if (!alley) return;
     StorageService.collections

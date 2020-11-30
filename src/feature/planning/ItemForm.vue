@@ -25,10 +25,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
-import { ItemToBuy } from './item-to-buy';
+import { PlanListItem } from './model';
 export default defineComponent({
-  name: 'ToBuyItem',
-  setup(props, { emit }) {
+  name: 'ItemForm',
+  setup(_, { emit }) {
     const availableUnits = ['x', 'g', 'dag', 'kg', 'ml', 'l'];
     const name = ref('');
     const details = ref('');
@@ -43,7 +43,7 @@ export default defineComponent({
       submit: () => {
         const trimmedName = name.value.trim().toLowerCase();
         if (!trimmedName) return;
-        const item: ItemToBuy = {
+        const item: PlanListItem = {
           name: trimmedName,
           details: details.value,
           unit: unit.value,
@@ -52,7 +52,7 @@ export default defineComponent({
         emit('submit', item);
         name.value = '';
         details.value = '';
-        unit.value = '';
+        unit.value = availableUnits[0];
         quantity.value = 1;
       },
     };
@@ -75,9 +75,6 @@ form {
 input {
   display: block;
   width: 100%;
-}
-input::placeholder {
-  font-style: italic;
 }
 .quantity {
   width: 100%;

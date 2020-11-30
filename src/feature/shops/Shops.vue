@@ -25,13 +25,7 @@
 
 <script lang="ts">
 import CustomInput from '@/components/Input.vue';
-import {
-  computed,
-  defineComponent,
-  inject,
-  ref,
-  watchEffect,
-} from '@vue/composition-api';
+import { computed, defineComponent, inject } from '@vue/composition-api';
 import { ShopRepository } from './shop-repository';
 
 export default defineComponent({

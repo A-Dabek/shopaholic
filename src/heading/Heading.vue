@@ -37,8 +37,6 @@
 
 <script lang="ts">
 import { Screen } from './screens';
-import Planner from './components/Planner.vue';
-import Shopping from './components/Shopping.vue';
 import { defineComponent, ref, computed } from '@vue/composition-api';
 import { StorageService } from '@/repository/storage-service';
 
@@ -48,7 +46,7 @@ export default defineComponent({
   firestore: {
     bought: StorageService.collections.bought,
   },
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const storage = new StorageService();
     const bought = ref<{ id: string }[]>([]);
     const isDirty = computed<boolean>(() => bought.value.length > 0);

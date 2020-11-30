@@ -15,13 +15,13 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { ItemToBuy } from './item-to-buy';
+import { PlanListItem } from './model';
 export default defineComponent({
   name: 'ListItem',
   props: {
-    item: Object as () => ItemToBuy,
+    item: Object as () => PlanListItem,
   },
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     return {
       onRemove: () => emit('remove'),
     };

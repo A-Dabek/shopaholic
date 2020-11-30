@@ -13,7 +13,7 @@ export default defineComponent({
   props: {
     placeholder: String,
   },
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const value = ref('');
     return {
       value,
@@ -42,9 +42,6 @@ export default defineComponent({
   padding: 6px 4px;
   outline: none !important;
   border: none;
-}
-input::placeholder {
-  font-style: italic;
 }
 .wrapper .icon {
   margin-left: 1rem;

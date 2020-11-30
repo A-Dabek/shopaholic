@@ -1,19 +1,13 @@
 import { StorageService } from '@/repository/storage-service';
 import { computed } from '@vue/composition-api';
 import { orderBy } from 'lodash-es';
-import { ItemToBuy } from './item-to-buy';
+import { PlanList, PlanListItem } from './model';
 
-export interface ListData {
-  id: string;
-  items: ItemToBuy[];
-  title: string;
-}
-
-export function useListLogic(props: { data: ListData }) {
+export function useListLogic(props: { data: PlanList }) {
   function removeList() {
     StorageService.collections.toBuyList(props.data.id).delete();
   }
-  function addToList(item: ItemToBuy) {
+  function addToList(item: PlanListItem) {
     StorageService.collections.product.doc(item.name).set({});
     StorageService.collections.toBuyList(props.data.id).update({
       items: [...props.data.items, item],
