@@ -22,11 +22,12 @@
 import { Screen } from './heading/screens';
 import Planner from './planning/Planner.vue';
 import Heading from './heading/Heading.vue';
-import { defineComponent, ref } from '@vue/composition-api';
-import Shops from './shops/Shops.vue';
+import { defineComponent, provide, ref } from '@vue/composition-api';
 import Alley from './alley/Alley.vue';
 import AlleyOrder from './alley/AlleyOrder.vue';
 import Shopping from './components/Shopping.vue';
+import Shops from './feature/shops/Shops.vue';
+import { ShopRepositoryFirestore } from './repository/shop-repository-firestore';
 
 export default defineComponent({
   name: 'App',
@@ -40,6 +41,7 @@ export default defineComponent({
   },
   inject: ['shopStore'],
   setup() {
+    provide('shopRepository', new ShopRepositoryFirestore());
     const screen = ref(Screen.planner);
     return {
       screens: Screen,

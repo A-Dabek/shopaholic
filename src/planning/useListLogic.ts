@@ -1,7 +1,7 @@
-import { computed, watchEffect } from '@vue/composition-api';
+import { StorageService } from '@/repository/storage-service';
+import { computed } from '@vue/composition-api';
 import { orderBy } from 'lodash-es';
 import { ItemToBuy } from './item-to-buy';
-import { StorageService } from '@/storage-service';
 
 export interface ListData {
   id: string;

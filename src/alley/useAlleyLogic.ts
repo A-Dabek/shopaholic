@@ -1,4 +1,4 @@
-import { StorageService } from '@/storage-service';
+import { StorageService } from '@/repository/storage-service';
 import { computed, ref, watchEffect } from '@vue/composition-api';
 import { Alley } from './alley';
 

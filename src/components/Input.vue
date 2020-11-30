@@ -1,18 +1,19 @@
 <template>
   <div class="wrapper">
     <input :placeholder="placeholder" v-model="value" @keydown.enter="submit" />
-    <fa-i class="icon" icon="plus" @click="submit"></fa-i>
+    <fa-i class="icon" icon="plus" @click.native="submit" role="button"></fa-i>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
-import List from './List.vue';
 
 export default defineComponent({
   name: 'CustomInput',
-  props: ['placeholder'],
-  setup(props: { placeholder: string }, { emit }) {
+  props: {
+    placeholder: String,
+  },
+  setup(props, { emit }) {
     const value = ref('');
     return {
       value,

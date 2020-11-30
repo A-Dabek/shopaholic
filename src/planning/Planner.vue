@@ -14,7 +14,7 @@
 import { defineComponent, ref } from '@vue/composition-api';
 import List from './List.vue';
 import CustomInput from '../components/Input.vue';
-import { StorageService } from '@/storage-service';
+import { StorageService } from '@/repository/storage-service';
 
 export default defineComponent({
   name: 'Planner',

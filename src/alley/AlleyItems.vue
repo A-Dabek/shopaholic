@@ -39,8 +39,6 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import CustomInput from '@/components/Input.vue';
-import draggable from 'vuedraggable';
 import { useAlleyLogic } from './useAlleyLogic';
 
 export default defineComponent({

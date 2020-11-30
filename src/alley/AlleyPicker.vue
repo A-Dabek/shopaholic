@@ -14,9 +14,8 @@
 </template>
 
 <script lang="ts">
+import { StorageService } from '@/repository/storage-service';
 import { defineComponent, ref, watchEffect } from '@vue/composition-api';
-import CustomInput from '@/components/Input.vue';
-import { StorageService } from '@/storage-service';
 
 export default defineComponent({
   name: 'AlleyPicker',

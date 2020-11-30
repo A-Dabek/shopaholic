@@ -36,18 +36,17 @@
 </template>
 
 <script lang="ts">
-import { StorageService } from '../storage-service';
 import { Screen } from './screens';
 import Planner from './components/Planner.vue';
 import Shopping from './components/Shopping.vue';
 import { defineComponent, ref, computed } from '@vue/composition-api';
-import { db } from '../firestore';
+import { StorageService } from '@/repository/storage-service';
 
 export default defineComponent({
   name: 'Heading',
   inject: ['shopStore'],
   firestore: {
-    bought: db.collection('bought'),
+    bought: StorageService.collections.bought,
   },
   setup(props, { emit }) {
     const storage = new StorageService();

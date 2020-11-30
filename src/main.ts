@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import VueCompositionApi, { reactive } from '@vue/composition-api';
+import VueCompositionApi from '@vue/composition-api';
 import './registerServiceWorker';
 import { firestorePlugin } from 'vuefire';
 import { library } from '@fortawesome/fontawesome-svg-core';

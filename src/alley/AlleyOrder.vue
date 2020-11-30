@@ -18,9 +18,9 @@
 <script lang="ts">
 import { defineComponent, ref, watchEffect } from '@vue/composition-api';
 import CustomInput from '@/components/Input.vue';
-import { StorageService } from '@/storage-service';
 import draggable from 'vuedraggable';
 import { Alley } from '@/alley/alley';
+import { StorageService } from '@/repository/storage-service';
 
 export default defineComponent({
   name: 'AlleyOrder',

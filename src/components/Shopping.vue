@@ -44,12 +44,11 @@ import {
   computed,
   watchEffect,
 } from '@vue/composition-api';
-import { db } from '../firestore';
 import { flatten, orderBy } from 'lodash-es';
 import { useBoughtLogic } from './useBoughtLogic';
 import { ItemToBuy } from '@/planning/item-to-buy';
-import { StorageService } from '@/storage-service';
 import { Alley } from '@/alley/alley';
+import { StorageService } from '@/repository/storage-service';
 
 export default defineComponent({
   name: 'Shopping',
@@ -60,7 +59,7 @@ export default defineComponent({
     },
   },
   firestore: {
-    bought: db.collection('bought'),
+    bought: StorageService.collections.bought,
   },
   setup(props) {
     const alleys = ref<Alley[]>([]);

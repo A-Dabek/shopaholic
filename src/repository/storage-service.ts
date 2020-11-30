@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash-es';
-import { Alley } from './alley/alley';
+import { Alley } from '../alley/alley';
 import { db } from './firestore';
 
 export class StorageService {
@@ -32,15 +32,6 @@ export class StorageService {
   addPlannerList(name: string) {
     if (!name) return;
     StorageService.collections.planner.add({ title: name, items: [] });
-  }
-
-  addShop(name: string) {
-    if (!name) return;
-    StorageService.collections.shops.doc(name).set({});
-  }
-
-  removeShop(name: string) {
-    StorageService.collections.shops.doc(name).delete();
   }
 
   addAlley(shop: string, alley: string, order: number) {
