@@ -8,16 +8,17 @@ import { ShopRepositoryStub } from './shop-repository-stub';
 
 Vue.use(VueCompositionAPI);
 
-describe.only('Shops', () => {
+describe('Shops', () => {
   let component: RenderResult;
-  const input = () => component.getByRole('textbox') as HTMLInputElement;
-  const submit = () =>
-    within(component.getByTestId('shop')).getByRole('button');
-  const items = () => component.queryAllByRole('listitem');
-  const item = (name: string) => component.getByText(name);
-  const removeBtn = () =>
-    within(component.getByRole('listitem')).getByRole('button');
   let repository: ShopRepositoryStub;
+  const query = {
+    input: () => component.getByRole('textbox') as HTMLInputElement,
+    submit: () => within(component.getByTestId('shop')).getByRole('button'),
+    items: () => component.queryAllByRole('listitem'),
+    item: (name: string) => component.getByText(name),
+    removeBtn: () =>
+      within(component.getByRole('listitem')).getByRole('button'),
+  };
 
   function setup(shops: string[] = []) {
     repository = new ShopRepositoryStub();
@@ -29,44 +30,44 @@ describe.only('Shops', () => {
         shopRepository: repository,
       },
     });
-    expect(items().length).to.eq(shops.length);
+    expect(query.items().length).to.eq(shops.length);
   }
 
   describe('when adding new shop', () => {
     it('should add to collection on submit', async () => {
       setup();
-      await fireEvent.update(input(), 'new shop');
-      await fireEvent.click(submit());
-      expect(items().length).to.eq(1);
+      await fireEvent.update(query.input(), 'new shop');
+      await fireEvent.click(query.submit());
+      expect(query.items().length).to.eq(1);
     });
 
     it('should sanitize input from whitespace and uppercase letter', async () => {
       setup();
-      await fireEvent.update(input(), '  UppercasE tESt   ');
-      await fireEvent.click(submit());
-      expect(item('uppercase test')).to.exist;
+      await fireEvent.update(query.input(), '  UppercasE tESt   ');
+      await fireEvent.click(query.submit());
+      expect(query.item('uppercase test')).to.exist;
     });
 
     it('should order shops alphabetically', async () => {
       setup(['b shop', 'd shop', 'f shop']);
-      await fireEvent.update(input(), 'a shop');
-      await fireEvent.click(submit());
-      expect(items()[0].textContent).to.eq('a shop');
+      await fireEvent.update(query.input(), 'a shop');
+      await fireEvent.click(query.submit());
+      expect(query.items()[0].textContent).to.eq('a shop');
 
-      await fireEvent.update(input(), 'g shop');
-      await fireEvent.click(submit());
-      expect(items()[4].textContent).to.eq('g shop');
+      await fireEvent.update(query.input(), 'g shop');
+      await fireEvent.click(query.submit());
+      expect(query.items()[4].textContent).to.eq('g shop');
 
-      await fireEvent.update(input(), 'c shop');
-      await fireEvent.click(submit());
-      expect(items()[2].textContent).to.eq('c shop');
+      await fireEvent.update(query.input(), 'c shop');
+      await fireEvent.click(query.submit());
+      expect(query.items()[2].textContent).to.eq('c shop');
     });
   });
 
   it('should remove shop', async () => {
     const testQuery = 'removal test';
     setup([testQuery]);
-    await fireEvent.click(removeBtn());
-    expect(items().length).to.eq(0);
+    await fireEvent.click(query.removeBtn());
+    expect(query.items().length).to.eq(0);
   });
 });

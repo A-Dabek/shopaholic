@@ -12,12 +12,14 @@ export class ShopRepositoryFirestore implements ShopRepository {
     });
     return shops;
   }
+
   add(name: string): void {
     if (!name) return;
     StorageService.collections.shops
       .doc(name.trim().toLocaleLowerCase())
       .set({}, { merge: true });
   }
+
   remove(name: string): void {
     StorageService.collections.shops.doc(name).delete();
   }
