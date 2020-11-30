@@ -8,7 +8,6 @@ export interface PlanListItem {
 }
 
 export interface PlanList {
-  id: string;
   items: PlanListItem[];
   title: string;
 }
@@ -17,4 +16,6 @@ export interface PlanListRepository {
   findAll(): Ref<PlanList[]>;
   add(name: string): void;
   remove(name: string): void;
+  addListItem(listName: string, item: PlanListItem): void;
+  removeListItem(listName: string, item: string): void;
 }

@@ -1,5 +1,5 @@
 import { ref, Ref } from '@vue/composition-api';
-import { PlanList, PlanListRepository } from './model';
+import { PlanList, PlanListItem, PlanListRepository } from './model';
 
 export class PlanListRepositoryStub implements PlanListRepository {
   data = ref<PlanList[]>([]);
@@ -11,11 +11,25 @@ export class PlanListRepositoryStub implements PlanListRepository {
   add(name: string): void {
     this.data.value = [
       ...this.data.value.filter(item => item.title !== name),
-      { id: String(Math.random()), title: name, items: [] },
+      { title: name, items: [] },
     ];
   }
 
   remove(name: string): void {
     this.data.value = this.data.value.filter(item => item.title !== name);
+  }
+
+  addListItem(listName: string, item: PlanListItem) {
+    const list = this.data.value.find(l => l.title === listName);
+    if (!list) return;
+    list.items = [...list.items, item];
+    this.data.value = [...this.data.value];
+  }
+
+  removeListItem(listName: string, item: string): void {
+    const list = this.data.value.find(l => l.title === listName);
+    if (!list) return;
+    list.items = list.items.filter(i => i.name !== item);
+    this.data.value = [...this.data.value];
   }
 }

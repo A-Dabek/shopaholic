@@ -15,18 +15,28 @@ describe.only('Planner', () => {
     lists: () => component.queryAllByRole('listitem', { name: 'plan-list' }),
     list: (name: string) => component.getByText(name),
     listNameInput: () =>
-      within(component.getByTestId('list')).getByRole(
+      within(component.getByLabelText('new list')).getByRole(
         'textbox'
       ) as HTMLInputElement,
     listNameSubmit: () =>
-      within(component.getByTestId('list')).getByRole('button'),
+      within(component.getByLabelText('new list')).getByRole('button'),
+    productNameInput: () =>
+      component.getByRole('textbox', { name: 'product name' }),
+    productFormSubmit: () =>
+      component.getByRole('button', { name: 'submit product' }),
+    products: () => component.getAllByRole('listitem', { name: 'product' }),
+    product: (name: string) => component.getByText(name),
+    quantityInput: () =>
+      component.getByRole('spinbutton', { name: 'quantity' }),
+    quantityUnits: () => component.getAllByRole('listitem', { name: 'unit' }),
+    detailsInput: () => component.getByRole('textbox', { name: 'details' }),
   };
 
   function setup(lists: PlanList[] = []) {
     repository = new PlanListRepositoryStub();
     repository.data.value = lists;
     component = render(Planner, {
-      stubs: ['fa-i'],
+      stubs: { ['fa-i']: { template: `<i @click="$emit('click')"></i>` } },
       provide: {
         planListRepository: repository,
       },
@@ -47,6 +57,32 @@ describe.only('Planner', () => {
       await fireEvent.update(query.listNameInput(), '  UppercasE tESt   ');
       await fireEvent.click(query.listNameSubmit());
       expect(query.list('uppercase test')).to.exist;
+    });
+  });
+
+  describe('when adding an item to list', () => {
+    it('should add on submit with minimal data', async () => {
+      setup([{ title: 'list', items: [] }]);
+      await fireEvent.update(query.productNameInput(), 'new product');
+      await fireEvent.click(query.productFormSubmit());
+      expect(query.products().length).to.eq(1);
+    });
+
+    it('should sanitize product name', async () => {
+      setup([{ title: 'list', items: [] }]);
+      await fireEvent.update(query.productNameInput(), '   NeW prODUct 2 ');
+      await fireEvent.click(query.productFormSubmit());
+      expect(query.product('new product 2')).to.exist;
+    });
+
+    it('should add on submit with full data', async () => {
+      setup([{ title: 'list', items: [] }]);
+      await fireEvent.update(query.productNameInput(), 'new product');
+      await fireEvent.update(query.quantityInput(), '3');
+      await fireEvent.click(query.quantityUnits()[2]);
+      await fireEvent.update(query.detailsInput(), 'custom description');
+      await fireEvent.click(query.productFormSubmit());
+      expect(query.products().length).to.eq(1);
     });
   });
 });

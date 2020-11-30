@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <input :placeholder="placeholder" v-model="value" @keydown.enter="submit" />
-    <fa-i class="icon" icon="plus" @click.native="submit" role="button"></fa-i>
+    <fa-i class="icon" icon="plus" @click="submit" role="button"></fa-i>
   </div>
 </template>
 

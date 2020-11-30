@@ -11,7 +11,7 @@
       <fa-i
         class="action action-remove"
         icon="times"
-        @click="removeList"
+        @click="remove(data.id)"
       ></fa-i>
     </h3>
     <ul>
@@ -19,19 +19,21 @@
         v-for="item of items"
         :key="item.name"
         :item="item"
-        @remove="removeFromList(item.name)"
+        @remove="removeListItem(item.name)"
       />
     </ul>
-    <item-form @submit="addToList" />
+    <item-form @submit="addListItem" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { Entity } from '@/repository/model';
+import { StorageService } from '@/repository/storage-service';
+import { computed, defineComponent, inject } from '@vue/composition-api';
+import { orderBy } from 'lodash-es';
 import ItemForm from './ItemForm.vue';
 import ListItem from './ListItem.vue';
-import { PlanList } from './model';
-import { useListLogic } from './useListLogic';
+import { PlanList, PlanListItem, PlanListRepository } from './model';
 
 export default defineComponent({
   name: 'List',
@@ -41,12 +43,26 @@ export default defineComponent({
   },
   props: {
     data: {
-      type: Object as () => PlanList,
+      type: Object as () => PlanList & Entity,
       required: true,
     },
   },
   setup(props) {
-    return useListLogic(props);
+    const items = computed(() => orderBy(props.data.items, item => item.name));
+    const repository = inject('planListRepository') as PlanListRepository;
+    return {
+      items,
+      resetList: function () {
+        StorageService.collections.toBuyList(props.data.id).update({
+          items: [],
+        });
+      },
+      remove: (id: string) => repository.remove(id),
+      addListItem: (item: PlanListItem) =>
+        repository.addListItem(props.data.title, item),
+      removeListItem: (item: string) =>
+        repository.removeListItem(props.data.title, item),
+    };
   },
 });
 </script>

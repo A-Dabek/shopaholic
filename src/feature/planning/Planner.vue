@@ -1,12 +1,15 @@
 <template>
   <div class="wrapper">
-    <ol>
-      <li v-for="list of lists" :key="list.id" aria-label="plan-list">
-        <List class="rainbow-arc list" :data="list" />
-      </li>
-    </ol>
+    <List
+      v-for="list of lists"
+      :key="list.title"
+      class="rainbow-arc list"
+      :data="list"
+      role="listitem"
+      aria-label="plan-list"
+    />
     <custom-input
-      data-testId="list"
+      aria-label="new list"
       placeholder="Nowa lista"
       @submit="newList"
     />
@@ -39,14 +42,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-ol {
-  list-style: none;
-}
-ol,
-li {
-  margin: 0;
-  padding: 0;
-}
 .wrapper .list {
   color: white;
   margin-bottom: 10px;

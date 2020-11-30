@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li aria-label="product">
     <div class="wrapper">
       <div class="content">
         <label class="name">{{ item.name }}</label>

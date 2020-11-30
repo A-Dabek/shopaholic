@@ -5,7 +5,7 @@ import 'firebase/firestore';
 export const db = setup();
 
 function setup() {
-  if (location.hostname === 'localhost') {
+  if (location.hostname === 'xxxlocalhost') {
     const _db = firebase
       .initializeApp({
         projectId: 'test',

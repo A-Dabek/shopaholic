@@ -1,13 +1,23 @@
 <template>
   <form>
     <div class="form-group">
-      <input placeholder="Kolejny produkt" v-model="name" />
+      <input
+        placeholder="Kolejny produkt"
+        aria-label="product name"
+        v-model="name"
+      />
 
       <div class="quantity">
-        <input placeholder="Liczba / Ilość" v-model="quantity" type="number" />
+        <input
+          placeholder="Liczba / Ilość"
+          aria-label="quantity"
+          v-model="quantity"
+          type="number"
+        />
         <ul class="units">
           <li
             v-for="u in availableUnits"
+            aria-label="unit"
             :key="u"
             :class="{ active: unit === u }"
             @click="unit = u"
@@ -17,9 +27,15 @@
         </ul>
       </div>
 
-      <input placeholder="Szczegóły" v-model="details" />
+      <input placeholder="Szczegóły" aria-label="details" v-model="details" />
     </div>
-    <fa-i class="icon" icon="plus" @click="submit"></fa-i>
+    <fa-i
+      class="icon"
+      icon="plus"
+      aria-label="submit product"
+      role="button"
+      @click="submit"
+    ></fa-i>
   </form>
 </template>
 

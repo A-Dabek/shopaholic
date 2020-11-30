@@ -11,7 +11,7 @@
         <fa-i
           icon="times"
           role="button"
-          @click.native.stop="removeShop(shopItem)"
+          @click.stop="removeShop(shopItem)"
         ></fa-i>
       </li>
     </ul>
