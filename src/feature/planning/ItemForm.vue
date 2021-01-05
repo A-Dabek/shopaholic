@@ -9,7 +9,7 @@
 
       <div class="quantity">
         <input
-          placeholder="Liczba / Ilość"
+          placeholder="1"
           aria-label="quantity"
           v-model="quantity"
           type="number"
@@ -49,7 +49,7 @@ export default defineComponent({
     const name = ref('');
     const details = ref('');
     const unit = ref(availableUnits[0]);
-    const quantity = ref(1);
+    const quantity = ref<number | undefined>();
     return {
       availableUnits,
       name,
@@ -63,13 +63,13 @@ export default defineComponent({
           name: trimmedName,
           details: details.value,
           unit: unit.value,
-          quantity: Number(quantity.value),
+          quantity: Number(quantity.value || 1),
         };
         emit('submit', item);
         name.value = '';
         details.value = '';
         unit.value = availableUnits[0];
-        quantity.value = 1;
+        quantity.value = undefined;
       },
     };
   },
