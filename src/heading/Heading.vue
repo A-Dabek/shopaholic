@@ -1,28 +1,12 @@
 <template>
   <nav class="wrapper">
-    <a @click="onNavigation(screens.shops)">
-      <fa-i icon="store"></fa-i>
-      <label :class="{ selected: selected === screens.shops }">{{
-        shopStore.state.shop || 'Sklepy'
-      }}</label>
-    </a>
-    <a v-if="shopStore.state.shop" @click="onNavigation(screens.alleys)">
-      <fa-i icon="list-ol"></fa-i>
-      <label :class="{ selected: selected === screens.alleys }">Alejki</label>
-    </a>
-    <a v-if="shopStore.state.shop" @click="onNavigation(screens.products)">
-      <fa-i icon="carrot"></fa-i>
-      <label :class="{ selected: selected === screens.products }"
-        >Produkty</label
-      >
-    </a>
     <a @click="onNavigation(screens.planner)">
       <fa-i icon="pencil-alt"></fa-i>
       <label :class="{ selected: selected === screens.planner }"
         >Planowanie</label
       >
     </a>
-    <a v-if="shopStore.state.shop" @click="onNavigation(screens.shopping)">
+    <a @click="onNavigation(screens.shopping)">
       <fa-i icon="shopping-basket"></fa-i>
       <label :class="{ selected: selected === screens.shopping }">
         Zakupy</label
@@ -42,7 +26,6 @@ import { StorageService } from '@/repository/storage-service';
 
 export default defineComponent({
   name: 'Heading',
-  inject: ['shopStore'],
   firestore: {
     bought: StorageService.collections.bought,
   },

@@ -6,6 +6,7 @@ import {
 import { FirestoreRepository } from './firestore-repository';
 import { Entity } from './model';
 import { StorageService } from './storage-service';
+import firebase from 'firebase/app';
 
 export class PlanListRepositoryFirestore
   extends FirestoreRepository<PlanList & Entity>

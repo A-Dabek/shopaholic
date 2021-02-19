@@ -1,5 +1,6 @@
 import { ref, Ref, watchEffect } from '@vue/composition-api';
 import { Repository } from './repository';
+import firebase from 'firebase/app';
 
 export class FirestoreRepository<T = string> implements Repository<T> {
   protected data: Ref<T[]>;

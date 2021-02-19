@@ -1,5 +1,5 @@
 import { Ref } from '@vue/composition-api';
-import { db } from '../repository/firestore';
+import { db } from '@/repository/firestore';
 
 export function useBoughtLogic(boughtDict: Ref<{ [k: string]: boolean }>) {
   function onItemClick(item: string) {

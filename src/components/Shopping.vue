@@ -38,43 +38,22 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
-  onMounted,
   computed,
-  watchEffect,
+  defineComponent,
+  onMounted,
+  ref,
 } from '@vue/composition-api';
-import { flatten, orderBy } from 'lodash-es';
+import { flatten } from 'lodash-es';
 import { useBoughtLogic } from './useBoughtLogic';
-import { Alley } from '@/alley/alley';
 import { StorageService } from '@/repository/storage-service';
 import { PlanListItem } from '@/feature/planning/model';
 
 export default defineComponent({
   name: 'Shopping',
-  props: {
-    shop: {
-      type: String,
-      required: true,
-    },
-  },
   firestore: {
     bought: StorageService.collections.bought,
   },
-  setup(props) {
-    const alleys = ref<Alley[]>([]);
-    watchEffect(() => {
-      return StorageService.collections
-        .alleys(props.shop)
-        .onSnapshot(snapshot => {
-          alleys.value = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as Alley[];
-          alleys.value = orderBy(alleys.value, a => a.order);
-        });
-    });
-
+  setup() {
     const planned = ref<PlanListItem[]>([]);
     onMounted(() => {
       StorageService.collections.planner.get().then(snapshot => {
@@ -96,16 +75,12 @@ export default defineComponent({
     });
 
     const orderedItemsToBuy = computed(() => {
-      const itemsToBuy = planned.value.filter(
+      return planned.value.filter(
         item => !bought.value.some(b => b.id === item.name)
-      );
-      return orderBy(itemsToBuy, item =>
-        alleys.value.findIndex(a => a.items.includes(item.name))
       );
     });
 
     return {
-      alleys,
       planned,
       bought,
       boughtDict,
@@ -124,17 +99,12 @@ export default defineComponent({
 }
 ol,
 ul {
-  padding: 0;
-  padding-right: 5px;
-  padding-left: 5px;
+  padding: 0 5px;
 }
 li {
   list-style: none;
   font-size: 1.25rem;
-  padding-bottom: 5px;
-  padding-top: 5px;
-  padding-right: 5px;
-  padding-left: 5px;
+  padding: 5px;
 }
 li.bought {
   text-decoration: line-through;
