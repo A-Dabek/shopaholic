@@ -26,9 +26,16 @@ export class PlanListRepositoryFirestore
   addListItem(listName: string, item: PlanListItem): void {
     const list = this.data.value.find(l => l.title === listName);
     if (!list) return;
-    StorageService.collections.product.doc(item.name).set({});
     StorageService.collections.toBuyList(list.id).update({
       items: [...list.items, item],
+    });
+  }
+
+  changeListItem(listName: string, item: PlanListItem): void {
+    const list = this.data.value.find(l => l.title === listName);
+    if (!list) return;
+    StorageService.collections.toBuyList(list.id).update({
+      items: list.items.map(i => (item.name === i.name ? item : i)),
     });
   }
 

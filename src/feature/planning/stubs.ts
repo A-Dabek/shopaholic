@@ -32,4 +32,9 @@ export class PlanListRepositoryStub implements PlanListRepository {
     list.items = list.items.filter(i => i.name !== item);
     this.data.value = [...this.data.value];
   }
+
+  changeListItem(listName: string, item: PlanListItem): void {
+    console.log(listName);
+    console.log(item);
+  }
 }

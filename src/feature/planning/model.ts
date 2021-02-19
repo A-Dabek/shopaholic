@@ -18,4 +18,5 @@ export interface PlanListRepository {
   remove(name: string): void;
   addListItem(listName: string, item: PlanListItem): void;
   removeListItem(listName: string, item: string): void;
+  changeListItem(listName: string, item: PlanListItem): void;
 }

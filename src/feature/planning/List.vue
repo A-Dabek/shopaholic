@@ -20,6 +20,8 @@
         :key="item.name"
         :item="item"
         @remove="removeListItem(item.name)"
+        @add="addQuantity(item)"
+        @subtract="subtractQuantity(item)"
       />
     </ul>
     <item-form @submit="addListItem" />
@@ -62,6 +64,16 @@ export default defineComponent({
         repository.addListItem(props.data.title, item),
       removeListItem: (item: string) =>
         repository.removeListItem(props.data.title, item),
+      addQuantity: (item: PlanListItem) =>
+        repository.changeListItem(props.data.title, {
+          ...item,
+          quantity: item.quantity + 1,
+        }),
+      subtractQuantity: (item: PlanListItem) =>
+        repository.changeListItem(props.data.title, {
+          ...item,
+          quantity: Math.max(item.quantity - 1, 1),
+        }),
     };
   },
 });
