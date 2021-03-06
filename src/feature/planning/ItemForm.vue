@@ -7,7 +7,7 @@
         v-model="name"
       />
 
-      <div class="quantity">
+      <div class="quantity" v-if="!!name">
         <input
           placeholder="1"
           aria-label="quantity"
@@ -27,7 +27,12 @@
         </ul>
       </div>
 
-      <input placeholder="Szczegóły" aria-label="details" v-model="details" />
+      <input
+        v-if="!!name"
+        placeholder="Szczegóły"
+        aria-label="details"
+        v-model="details"
+      />
     </div>
     <fa-i
       class="icon"

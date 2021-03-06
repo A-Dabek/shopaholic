@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <ol>
+    <ul>
       <li
-        v-for="(item, index) of orderedItemsToBuy"
+        v-for="item of orderedItemsToBuy"
         :key="item.name"
         class="shopping-item"
       >
@@ -10,12 +10,12 @@
           class="shopping-item-wrapper rainbow-arc"
           @click="onItemClick(item.name)"
         >
-          <span>{{ index + 1 }}. {{ item.name }}</span>
           <span class="count">{{ item.quantity }}{{ item.unit }}</span>
+          <span>{{ item.name }}</span>
           <span class="details">{{ item.details }}</span>
         </label>
       </li>
-    </ol>
+    </ul>
 
     <ul>
       <li
@@ -27,8 +27,8 @@
           class="shopping-item-wrapper rainbow-arc"
           @click="onItemClick(item.name)"
         >
-          <span>{{ item.name }}</span>
           <span class="count">{{ item.quantity }}{{ item.unit }}</span>
+          <span>{{ item.name }}</span>
           <span class="details">{{ item.details }}</span>
         </label>
       </li>
@@ -100,6 +100,7 @@ export default defineComponent({
 ol,
 ul {
   padding: 0 5px;
+  list-style-type: none;
 }
 li {
   list-style: none;
@@ -110,10 +111,11 @@ li.bought {
   text-decoration: line-through;
 }
 .shopping-item-wrapper {
+  padding-left: 5px;
   display: block;
 }
 .count {
-  float: right;
+  margin-right: 10px;
   font-weight: bold;
 }
 .details {

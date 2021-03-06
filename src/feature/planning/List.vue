@@ -80,6 +80,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ul {
+  list-style-type: none;
+  padding-left: 5px;
+}
 .action {
   float: right;
 }
