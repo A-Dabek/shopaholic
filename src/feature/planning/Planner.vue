@@ -17,10 +17,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from '@vue/composition-api';
+import { computed, defineComponent, inject } from '@vue/composition-api';
 import List from './List.vue';
 import CustomInput from '../../components/Input.vue';
 import { PlanListRepository } from './model';
+import _ from 'lodash';
 
 export default defineComponent({
   name: 'Planner',
@@ -32,7 +33,10 @@ export default defineComponent({
     const repository = inject<PlanListRepository>(
       'planListRepository'
     ) as PlanListRepository;
-    const lists = repository.findAll();
+    const lists = computed(() => {
+      const lists = repository.findAll();
+      return _.sortBy(lists.value, 'time');
+    });
     return {
       lists,
       newList: (name: string) => repository.add(name),

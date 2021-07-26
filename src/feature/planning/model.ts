@@ -10,6 +10,7 @@ export interface PlanListItem {
 export interface PlanList {
   items: PlanListItem[];
   title: string;
+  time: number;
 }
 
 export interface PlanListRepository {

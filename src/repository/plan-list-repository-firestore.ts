@@ -10,7 +10,8 @@ import firebase from 'firebase/app';
 
 export class PlanListRepositoryFirestore
   extends FirestoreRepository<PlanList & Entity>
-  implements PlanListRepository {
+  implements PlanListRepository
+{
   constructor() {
     super(StorageService.collections.planner);
   }
@@ -20,7 +21,7 @@ export class PlanListRepositoryFirestore
   }
 
   add(name: string) {
-    super.saveItem({ title: name, items: [] });
+    super.saveItem({ title: name, items: [], time: new Date().getTime() });
   }
 
   addListItem(listName: string, item: PlanListItem): void {

@@ -11,7 +11,7 @@ export class PlanListRepositoryStub implements PlanListRepository {
   add(name: string): void {
     this.data.value = [
       ...this.data.value.filter(item => item.title !== name),
-      { title: name, items: [] },
+      { title: name, items: [], time: 0 },
     ];
   }
 
