@@ -25,6 +25,7 @@
         v-for="item of items"
         :key="item.name"
         :item="item"
+        :is-bought="bought[item.name]"
         @remove="removeListItem(item.name)"
         @add="addQuantity(item)"
         @subtract="subtractQuantity(item)"

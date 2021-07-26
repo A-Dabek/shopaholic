@@ -49,10 +49,6 @@ ul.rainbow {
   padding: 0;
 }
 
-li {
-  text-transform: capitalize;
-}
-
 li.rainbow-arc {
   display: flex;
   justify-content: space-between;

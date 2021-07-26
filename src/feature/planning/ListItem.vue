@@ -8,7 +8,9 @@
             <span class="text">{{ item.quantity }}{{ item.unit }}</span>
             <fa-i class="minus" icon="minus" @click="subtract"></fa-i>
           </span>
-          <label class="name">{{ item.name }}</label>
+          <label class="name" :class="{ crossed: isBought }">{{
+            item.name
+          }}</label>
         </div>
         <span class="details">{{ item.details }}</span>
       </div>
@@ -25,6 +27,7 @@ export default defineComponent({
   name: 'ListItem',
   props: {
     item: Object as () => PlanListItem,
+    isBought: Boolean,
   },
   setup(_, { emit }) {
     return {
@@ -79,5 +82,9 @@ li {
 
 .text {
   text-transform: none;
+}
+
+.crossed {
+  text-decoration: line-through;
 }
 </style>
