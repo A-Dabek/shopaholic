@@ -3,6 +3,12 @@
     <h3 class="header">
       <label class="title">{{ data.title }}</label>
       <fa-i
+        class="action action-clear"
+        icon="tasks"
+        v-if="items.length > 0"
+        @click="clearList"
+      ></fa-i>
+      <fa-i
         class="action action-reset"
         icon="undo"
         v-if="items.length > 0"
@@ -48,12 +54,22 @@ export default defineComponent({
       type: Object as () => PlanList & Entity,
       required: true,
     },
+    bought: {
+      type: Object as () => Record<string, boolean>,
+      required: true,
+    },
   },
   setup(props) {
     const items = computed(() => orderBy(props.data.items, item => item.name));
     const repository = inject('planListRepository') as PlanListRepository;
     return {
       items,
+      clearList: function () {
+        const itemsToBuy = items.value.filter(item => !props.bought[item.name]);
+        StorageService.collections.toBuyList(props.data.id).update({
+          items: itemsToBuy,
+        });
+      },
       resetList: function () {
         StorageService.collections.toBuyList(props.data.id).update({
           items: [],
@@ -97,7 +113,8 @@ ul {
 .header .title {
   flex-grow: 1;
 }
-.header .action-reset {
+.header .action-reset,
+.header .action-clear {
   margin-right: 15px;
 }
 </style>

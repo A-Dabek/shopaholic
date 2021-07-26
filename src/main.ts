@@ -17,6 +17,7 @@ import {
   faShoppingBasket,
   faStore,
   faSync,
+  faTasks,
   faTimes,
   faTrash,
   faUndo,
@@ -38,7 +39,8 @@ library.add(
   faStore,
   faPencilAlt,
   faTrash,
-  faCarrot
+  faCarrot,
+  faTasks
 );
 
 Vue.use(VueCompositionApi);
