@@ -3,6 +3,9 @@
     <Heading class="header" @navigation="onNavigation" />
     <Planner v-if="screen === screens.planner" />
     <Shopping v-else />
+    <div class="recents">
+      <Recents />
+    </div>
   </main>
 </template>
 
@@ -13,10 +16,12 @@ import { defineComponent, provide, ref } from '@vue/composition-api';
 import Shopping from './components/Shopping.vue';
 import Planner from './feature/planning/Planner.vue';
 import { PlanListRepositoryFirestore } from './repository/plan-list-repository-firestore';
+import Recents from '@/components/Recents.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
+    Recents,
     Shopping,
     Heading,
     Planner,
@@ -86,5 +91,9 @@ li.rainbow-arc {
 
 input::placeholder {
   font-style: italic;
+}
+
+.recents {
+  margin-top: 1rem;
 }
 </style>

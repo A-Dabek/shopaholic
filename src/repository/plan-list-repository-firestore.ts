@@ -47,5 +47,6 @@ export class PlanListRepositoryFirestore
     StorageService.collections.toBuyList(list.id).update({
       items: list.items.filter((_, index) => index !== foundIndex),
     });
+    StorageService.collections.removed.doc(item).set(list.items[foundIndex]);
   }
 }
