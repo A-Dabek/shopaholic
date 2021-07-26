@@ -1,4 +1,6 @@
+import firebase from 'firebase';
 import { db } from './firestore';
+import CollectionReference = firebase.firestore.CollectionReference;
 
 export class StorageService {
   static collections = {
@@ -8,11 +10,17 @@ export class StorageService {
     planner: db.collection('planner'),
   };
 
+  removeAllRecentlyRemovedItems() {
+    this.removeCollection(StorageService.collections.removed);
+  }
+
   removeAllBoughtItems() {
-    StorageService.collections.bought.get().then(collection => {
-      collection.docs.forEach(doc =>
-        StorageService.collections.bought.doc(doc.id).delete()
-      );
+    this.removeCollection(StorageService.collections.bought);
+  }
+
+  private removeCollection(collectionRef: CollectionReference) {
+    collectionRef.get().then(collection => {
+      collection.docs.forEach(doc => collectionRef.doc(doc.id).delete());
     });
   }
 }

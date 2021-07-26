@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
-    <h3 class="header">
+    <h3 class="item-list-header">
       <label class="title">Ostatnio usunięte</label>
       <fa-i
-        class="action action-reset"
+        class="float-right"
         icon="undo"
         v-if="items.length > 0"
         @click="resetList"
@@ -31,6 +31,7 @@ export default defineComponent({
     removed: StorageService.collections.removed,
   },
   setup() {
+    const storage = new StorageService();
     const removed = ref<{ id: string; data: PlanListItem }[]>([]);
     const items = computed(() => {
       return removed.value.map(item => item.data);
@@ -39,11 +40,7 @@ export default defineComponent({
       removed,
       items,
       resetList: function () {
-        StorageService.collections.removed.get().then(collection => {
-          collection.docs.forEach(doc =>
-            StorageService.collections.removed.doc(doc.id).delete()
-          );
-        });
+        storage.removeAllRecentlyRemovedItems();
       },
     };
   },
@@ -51,21 +48,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-ul {
-  list-style-type: none;
-  padding-left: 5px;
-}
-.action {
-  float: right;
-}
 .wrapper {
   padding: 5px 10px;
-}
-.header {
-  margin-top: 0;
-  display: flex;
-}
-.header .title {
-  flex-grow: 1;
 }
 </style>

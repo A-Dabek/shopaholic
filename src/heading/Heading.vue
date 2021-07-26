@@ -34,13 +34,16 @@ export default defineComponent({
     const bought = ref<{ id: string }[]>([]);
     const isDirty = computed<boolean>(() => bought.value.length > 0);
     const selected = ref<Screen>(Screen.planner);
+
     function onNavigation(screen: Screen) {
       emit('navigation', screen);
       selected.value = screen;
     }
+
     function onReset() {
       storage.removeAllBoughtItems();
     }
+
     return {
       screens: Screen,
       bought,
@@ -61,15 +64,18 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
 a {
   text-decoration: none;
   color: inherit;
   margin-right: 10px;
   margin-bottom: 5px;
 }
+
 label {
   margin-left: 5px;
 }
+
 label.selected {
   font-weight: bold;
   text-decoration: underline;

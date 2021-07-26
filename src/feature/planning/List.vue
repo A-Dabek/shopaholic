@@ -1,21 +1,21 @@
 <template>
   <div class="wrapper">
-    <h3 class="header">
+    <h3 class="item-list-header">
       <label class="title">{{ data.title }}</label>
       <fa-i
-        class="action action-clear"
+        class="float-right action-clear"
         icon="tasks"
         v-if="items.length > 0"
         @click="clearList"
       ></fa-i>
       <fa-i
-        class="action action-reset"
+        class="float-right action-reset"
         icon="undo"
         v-if="items.length > 0"
         @click="resetList"
       ></fa-i>
       <fa-i
-        class="action action-remove"
+        class="float-right action-remove"
         icon="times"
         @click="remove(data.id)"
       ></fa-i>
@@ -97,25 +97,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-ul {
-  list-style-type: none;
-  padding-left: 5px;
-}
-.action {
-  float: right;
-}
 .wrapper {
   padding: 5px 10px;
 }
-.header {
-  margin-top: 0;
-  display: flex;
-}
-.header .title {
-  flex-grow: 1;
-}
-.header .action-reset,
-.header .action-clear {
+.item-list-header .action-reset,
+.item-list-header .action-clear {
   margin-right: 15px;
 }
 </style>
