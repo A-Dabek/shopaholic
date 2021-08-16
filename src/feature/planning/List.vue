@@ -1,13 +1,13 @@
 <template>
   <div class="wrapper">
     <h3 class="item-list-header">
-      <label class="title">{{ data.title }}</label>
       <fa-i
-        class="float-right action-clear"
+        class="action-clear"
         icon="tasks"
         v-if="items.length > 0"
         @click="clearList"
       ></fa-i>
+      <label class="title">{{ data.id }}</label>
       <fa-i
         class="float-right action-reset"
         icon="undo"
@@ -17,16 +17,16 @@
       <fa-i
         class="float-right action-remove"
         icon="times"
-        @click="remove(data.id)"
+        @click="remove"
       ></fa-i>
     </h3>
     <ul>
       <ListItem
         v-for="item of items"
-        :key="item.name"
+        :key="item.id"
         :item="item"
-        :is-bought="bought[item.name]"
-        @remove="removeListItem(item.name)"
+        :is-bought="bought[item.id]"
+        @remove="removeListItem(item.id)"
         @add="addQuantity(item)"
         @subtract="subtractQuantity(item)"
       />
@@ -37,12 +37,17 @@
 
 <script lang="ts">
 import { Entity } from '@/repository/model';
-import { StorageService } from '@/repository/storage-service';
-import { computed, defineComponent, inject } from '@vue/composition-api';
+import {
+  defineComponent,
+  inject,
+  ref,
+  watchEffect,
+} from '@vue/composition-api';
 import { orderBy } from 'lodash-es';
 import ItemForm from './ItemForm.vue';
 import ListItem from './ListItem.vue';
-import { PlanList, PlanListItem, PlanListRepository } from './model';
+import { PlanList, PlanListItem } from './model';
+import { PlanListRepository } from '@/feature/planning/plan-list-repository';
 
 export default defineComponent({
   name: 'List',
@@ -61,35 +66,32 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const items = computed(() => orderBy(props.data.items, item => item.name));
     const repository = inject('planListRepository') as PlanListRepository;
+    const service = repository.forList(props.data.id);
+    const items = ref<(PlanListItem & Entity)[]>([]);
+
+    watchEffect(() => {
+      return service.collection.onSnapshot(snapshot => {
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        items.value = orderBy(data, 'name');
+      });
+    });
     return {
       items,
-      clearList: function () {
-        const itemsToBuy = items.value.filter(item => !props.bought[item.name]);
-        StorageService.collections.toBuyList(props.data.id).update({
-          items: itemsToBuy,
-        });
-      },
-      resetList: function () {
-        StorageService.collections.toBuyList(props.data.id).update({
-          items: [],
-        });
-      },
-      remove: (id: string) => repository.remove(id),
-      addListItem: (item: PlanListItem) =>
-        repository.addListItem(props.data.title, item),
-      removeListItem: (item: string) =>
-        repository.removeListItem(props.data.title, item),
-      addQuantity: (item: PlanListItem) =>
-        repository.changeListItem(props.data.title, {
+      clearList: () => service.clearBought(),
+      resetList: () => service.clear(),
+      remove: () => repository.remove(props.data.id),
+      addListItem: (item: PlanListItem & Entity) => service.add(item.id, item),
+      removeListItem: (item: string) => service.remove(item),
+      addQuantity: (item: PlanListItem & Entity) =>
+        service.add(item.id, {
           ...item,
           quantity: item.quantity + 1,
         }),
-      subtractQuantity: (item: PlanListItem) =>
-        repository.changeListItem(props.data.title, {
+      subtractQuantity: (item: PlanListItem & Entity) =>
+        service.add(item.id, {
           ...item,
-          quantity: Math.max(item.quantity - 1, 1),
+          quantity: item.quantity - 1,
         }),
     };
   },

@@ -6,8 +6,8 @@ export class StorageService {
   static collections = {
     bought: db.collection('bought'),
     removed: db.collection('removed'),
-    toBuyList: (id: string) => db.collection('planner').doc(id),
-    planner: db.collection('planner'),
+    toBuyList: (id: string) => db.collection(`_list_${id}`),
+    lists: db.collection('lists'),
   };
 
   removeAllRecentlyRemovedItems() {
@@ -18,7 +18,7 @@ export class StorageService {
     this.removeCollection(StorageService.collections.bought);
   }
 
-  private removeCollection(collectionRef: CollectionReference) {
+  removeCollection(collectionRef: CollectionReference) {
     collectionRef.get().then(collection => {
       collection.docs.forEach(doc => collectionRef.doc(doc.id).delete());
     });

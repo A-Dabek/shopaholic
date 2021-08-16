@@ -62,10 +62,10 @@ export default defineComponent({
       unit,
       quantity,
       submit: () => {
-        const trimmedName = name.value.trim().toLowerCase();
+        const trimmedName = name.value.trim();
         if (!trimmedName) return;
         const item: PlanListItem = {
-          name: trimmedName,
+          id: trimmedName,
           details: details.value,
           unit: unit.value,
           quantity: Number(quantity.value || 1),

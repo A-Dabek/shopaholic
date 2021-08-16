@@ -9,7 +9,7 @@
             <fa-i class="minus" icon="minus" @click="subtract"></fa-i>
           </span>
           <label class="name" :class="{ crossed: isBought }">{{
-            item.name
+            item.id
           }}</label>
         </div>
         <span class="details">{{ item.details }}</span>
@@ -22,11 +22,12 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { PlanListItem } from './model';
+import { Entity } from '@/repository/model';
 
 export default defineComponent({
   name: 'ListItem',
   props: {
-    item: Object as () => PlanListItem,
+    item: Object as () => PlanListItem & Entity,
     isBought: Boolean,
   },
   setup(_, { emit }) {
