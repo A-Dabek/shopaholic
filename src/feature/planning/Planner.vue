@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
     <List
-      v-for="list of lists"
-      :key="list.title"
+      v-for="list of sortedLists"
+      :key="list.id"
       :bought="boughtDict"
       class="rainbow-arc list"
       :data="list"
@@ -21,14 +21,15 @@
 import { computed, defineComponent, inject, ref } from '@vue/composition-api';
 import List from './List.vue';
 import CustomInput from '../../components/Input.vue';
-import { PlanListRepository } from './model';
 import _ from 'lodash';
 import { StorageService } from '@/repository/storage-service';
+import { PlanListRepository } from '@/feature/planning/plan-list-repository';
 
 export default defineComponent({
   name: 'Planner',
   firestore: {
     bought: StorageService.collections.bought,
+    lists: StorageService.collections.lists,
   },
   components: {
     List,
@@ -39,22 +40,21 @@ export default defineComponent({
       'planListRepository'
     ) as PlanListRepository;
 
-    const lists = computed(() => {
-      const lists = repository.findAll();
-      return _.sortBy(lists.value, 'time');
-    });
+    const lists = ref<{ id: string; time: number }[]>([]);
+    const sortedLists = computed(() => _.sortBy(lists.value, 'time'));
 
     const bought = ref<{ id: string }[]>([]);
-    const boughtDict = computed<{ [k: string]: boolean }>(() =>
+    const boughtDict = computed(() =>
       bought.value
         .map(data => data.id)
         .reduce((prev, curr) => ({ ...prev, [curr]: true }), {})
     );
     return {
       lists,
+      sortedLists,
       bought,
       boughtDict,
-      newList: (name: string) => repository.add(name),
+      newList: (name: string) => repository.create(name),
     };
   },
 });

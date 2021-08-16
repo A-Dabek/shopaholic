@@ -15,9 +15,9 @@ import Heading from './heading/Heading.vue';
 import { defineComponent, provide, ref } from '@vue/composition-api';
 import Shopping from './components/Shopping.vue';
 import Planner from './feature/planning/Planner.vue';
-import { PlanListRepositoryFirestore } from './repository/plan-list-repository-firestore';
 import Recents from '@/components/Recents.vue';
 import './styles.css';
+import { PlanListRepository } from '@/feature/planning/plan-list-repository';
 
 export default defineComponent({
   name: 'App',
@@ -28,7 +28,7 @@ export default defineComponent({
     Planner,
   },
   setup() {
-    provide('planListRepository', new PlanListRepositoryFirestore());
+    provide('planListRepository', new PlanListRepository());
     const screen = ref(Screen.planner);
     return {
       screens: Screen,
