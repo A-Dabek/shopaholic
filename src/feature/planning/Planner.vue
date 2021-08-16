@@ -41,7 +41,7 @@ export default defineComponent({
     ) as PlanListRepository;
 
     const lists = ref<{ id: string; time: number }[]>([]);
-    const sortedLists = computed(() => _.sortBy(lists.value, 'time'));
+    const sortedLists = computed(() => _.sortBy(lists.value, 'timestamp'));
 
     const bought = ref<{ id: string }[]>([]);
     const boughtDict = computed(() =>

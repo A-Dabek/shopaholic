@@ -3,15 +3,15 @@
     <ul>
       <li
         v-for="item of orderedItemsToBuy"
-        :key="item.name"
+        :key="item.id"
         class="shopping-item"
       >
         <label
           class="shopping-item-wrapper rainbow-arc"
-          @click="onItemClick(item.name)"
+          @click="onItemClick(item.id)"
         >
           <span class="count">{{ item.quantity }}{{ item.unit }}</span>
-          <span>{{ item.name }}</span>
+          <span>{{ item.id }}</span>
           <span class="details">{{ item.details }}</span>
         </label>
       </li>
@@ -25,10 +25,10 @@
       >
         <label
           class="shopping-item-wrapper rainbow-arc"
-          @click="onItemClick(item.name)"
+          @click="onItemClick(item.id)"
         >
           <span class="count">{{ item.quantity }}{{ item.unit }}</span>
-          <span>{{ item.name }}</span>
+          <span>{{ item.id }}</span>
           <span class="details">{{ item.details }}</span>
         </label>
       </li>
@@ -47,6 +47,7 @@ import { flatten } from 'lodash-es';
 import { useBoughtLogic } from './useBoughtLogic';
 import { StorageService } from '@/repository/storage-service';
 import { PlanListItem } from '@/feature/planning/model';
+import { Entity } from '@/repository/model';
 
 export default defineComponent({
   name: 'Shopping',
@@ -54,12 +55,20 @@ export default defineComponent({
     bought: StorageService.collections.bought,
   },
   setup() {
-    const planned = ref<PlanListItem[]>([]);
+    const planned = ref<(PlanListItem & Entity)[]>([]);
     onMounted(() => {
-      StorageService.collections.planner.get().then(snapshot => {
-        planned.value = flatten(
-          snapshot.docs.map(doc => doc.data().items)
-        ) as PlanListItem[];
+      StorageService.collections.lists.get().then(async snapshot => {
+        const refs = snapshot.docs.map(doc =>
+          StorageService.collections.toBuyList(doc.id).get()
+        );
+        const snapshots = await Promise.all(refs);
+        const listOfItemLists = snapshots.map(snapshot =>
+          snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...(doc.data() as PlanListItem),
+          }))
+        );
+        planned.value = flatten(listOfItemLists) as (PlanListItem & Entity)[];
       });
     });
 
@@ -71,12 +80,12 @@ export default defineComponent({
     );
 
     const boughtItems = computed(() => {
-      return planned.value.filter(item => boughtDict.value[item.name]);
+      return planned.value.filter(item => boughtDict.value[item.id]);
     });
 
     const orderedItemsToBuy = computed(() => {
       return planned.value.filter(
-        item => !bought.value.some(b => b.id === item.name)
+        item => !bought.value.some(b => b.id === item.id)
       );
     });
 

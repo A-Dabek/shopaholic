@@ -47,6 +47,7 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import { PlanListItem } from './model';
+import { Entity } from '@/repository/model';
 export default defineComponent({
   name: 'ItemForm',
   setup(_, { emit }) {
@@ -64,7 +65,7 @@ export default defineComponent({
       submit: () => {
         const trimmedName = name.value.trim();
         if (!trimmedName) return;
-        const item: PlanListItem = {
+        const item: PlanListItem & Entity = {
           id: trimmedName,
           details: details.value,
           unit: unit.value,

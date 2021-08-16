@@ -72,8 +72,11 @@ export default defineComponent({
 
     watchEffect(() => {
       return service.collection.onSnapshot(snapshot => {
-        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        items.value = orderBy(data, 'name');
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...(doc.data() as PlanListItem),
+        }));
+        items.value = orderBy(data, 'id');
       });
     });
     return {

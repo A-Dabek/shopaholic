@@ -14,6 +14,9 @@ export class ListItemService {
   }
 
   async remove(name: string) {
+    const docRef = this.collection.doc(name);
+    const doc = await docRef.get();
+    await StorageService.collections.removed.doc(name).set(doc.data() || {});
     await this.collection.doc(name).delete();
   }
 
